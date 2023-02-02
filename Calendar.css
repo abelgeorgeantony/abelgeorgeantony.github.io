@@ -1,0 +1,73 @@
+.YearBoxdiv{
+    margin-top: 20px;
+    text-align: center;
+}
+.YearBox{
+    text-align: center;
+    height: 50px;
+    width: 200px;
+    font-size: 50px;
+}
+
+.MonthBoxdiv{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+.MonthBox{
+    text-align: center;
+    height: 50px;
+    width: 300px;
+    font-size: 50px;
+    vertical-align: top;
+    
+}
+.leftmonthbutton{
+    cursor: pointer;
+    margin-right: 50px;
+    height: 56px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+.leftarrimg{
+    height: 50px;
+    width: 50px;
+    margin: 0px;
+    padding: 0px;
+    transform: scaleX(-1);
+}
+.rightarrimg{
+    height: 50px;
+    width: 50px;
+    padding: 0px;
+}
+.rightmonthbutton{
+    cursor: pointer;
+    margin-left: 50px;
+    height: 56px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+}
+
+.monthtable,th,td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+td{
+    width: 100px;
+    height: 80px;
+    font-size: 60px;
+}
+.monthtable{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: auto;
+}
