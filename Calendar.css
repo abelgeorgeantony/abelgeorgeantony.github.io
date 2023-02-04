@@ -1,12 +1,35 @@
+body{
+   
+}
 .YearBoxdiv{
     margin-top: 20px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .YearBox{
+    background: rgba(255, 254, 254, 0.7);
     text-align: center;
     height: 50px;
-    width: 200px;
+    width: 22.22%;
     font-size: 50px;
+    margin-left: 5%;
+}
+.yearinbutton{
+    margin-left: 2%;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.searchimg{
+    height: 40px;
+    width: 40px;
+    
+    transform: scaleX(-1);
 }
 
 .MonthBoxdiv{
@@ -17,12 +40,12 @@
     justify-content: center;
 }
 .MonthBox{
+    background: rgba(255, 254, 254, 0.7);
     text-align: center;
-    height: 50px;
-    width: 300px;
+    height: 56px;
+    width: 33.3333333%;
     font-size: 50px;
     vertical-align: top;
-    
 }
 .leftmonthbutton{
     cursor: pointer;
@@ -45,6 +68,7 @@
     width: 50px;
     padding: 0px;
 }
+
 .rightmonthbutton{
     cursor: pointer;
     margin-left: 50px;
@@ -56,6 +80,7 @@
 }
 
 .monthtable,th,td{
+    background: rgba(255, 254, 254, 0.4);
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
@@ -63,11 +88,17 @@
 td{
     width: 100px;
     height: 80px;
+
     font-size: 60px;
 }
 .monthtable{
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    margin-bottom: auto;
+    
+    margin-top: 6%;
+    margin-bottom: 10%;
+    width: 69%;
+}
+.monthtablediv{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
 }

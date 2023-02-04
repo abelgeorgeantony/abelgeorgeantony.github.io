@@ -8,9 +8,10 @@
 <script src="Calendar.js"></script>
 </head>
 <body>
-
+<div>
 <div class="YearBoxdiv">
-    <input type="text" class="YearBox" id="YearInput" name="YearInput">
+    <input type="text" class="YearBox" id="YearInput" name="YearInput" onmouseover="unhidesearch()">
+    <button onclick="Yearinput()" class="yearinbutton" id="yearinbutton"><img class="searchimg" src="searchimg.png" alt="search"></button>
 </div>
 <br>
 
@@ -22,7 +23,7 @@
     <input type="text" class="MonthBox" id="MonthBox" value="" readonly>
     <button onclick="rightbutton()" class="rightmonthbutton" id="rightmonthbutton" disabled=><img class="rightarrimg" src="rightarrow.png" alt="right"></button>
 </div>
-
+<div class="monthtablediv">
 <table class="monthtable" id="monthtable">
     <tr>
         <th>SUNDAY</th>
@@ -89,9 +90,8 @@
         <td></td>
     </tr>
 </table>
-
-<button onclick="Yearinput()" id="yearinbutton">Enter Year</button>
-
+</div>
+</div>
 </body>
 
 

@@ -8,8 +8,15 @@ let montharr = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", 
 let monthname = montharr[monthnamecount];
 
 
+function unhidesearch(){
+    document.getElementById("yearinbutton").style.visibility = "visible";
+}
+function hidesearch(){
+    document.getElementById("yearinbutton").style.visibility = "hidden";
+}
 
 function Yearinput() {
+    document.body.style.backgroundImage = "url('monthp1.jpg')";
     tablereset();
     tablevalreset();
     startingday = 0; year = 0; days = 0;
@@ -21,6 +28,7 @@ function Yearinput() {
         pfjs = fjs;
         damprinter("startingmonthnochange");
         sidebuttonsendi("enable");
+        hidesearch();
     }
     else {
         console.log("null : No year entered");
@@ -285,6 +293,43 @@ function monthsetting(mode) {
 
     monthname = montharr[monthnamecount];
 
+    if(monthnamecount == 0){
+        document.body.style.backgroundImage = "url('monthp1.jpg')";
+    }
+    else if(monthnamecount == 1){
+        document.body.style.backgroundImage = "url('monthp2.jpg')";
+    }
+    else if(monthnamecount == 2){
+        document.body.style.backgroundImage = "url('monthp3.jpg')";
+    }
+    else if(monthnamecount == 3){
+        document.body.style.backgroundImage = "url('monthp4.jpg')";
+    }
+    else if(monthnamecount == 4){
+        document.body.style.backgroundImage = "url('monthp5.jpg')";
+    }
+    else if(monthnamecount == 5){
+        document.body.style.backgroundImage = "url('monthp6.jpg')";
+    }
+    else if(monthnamecount == 6){
+        document.body.style.backgroundImage = "url('monthp7.jpg')";
+    }
+    else if(monthnamecount == 7){
+        document.body.style.backgroundImage = "url('monthp8.jpg')";
+    }
+    else if(monthnamecount == 8){
+        document.body.style.backgroundImage = "url('monthp9.jpg')";
+    }
+    else if(monthnamecount == 9){
+        document.body.style.backgroundImage = "url('monthp10.jpg')";
+    }
+    else if(monthnamecount == 10){
+        document.body.style.backgroundImage = "url('monthp11.jpg')";
+    }
+    else{
+        document.body.style.backgroundImage = "url('monthp12.jpg')";
+    }
+
     stoplimitsetter();
 
 
@@ -343,6 +388,7 @@ function monthdecr() {
 }
 
 function rightbutton() {
+    hidesearch();
     sidebrpressed = true;
     sideblpressed = false;
     if (monthnamecount < 11) {
@@ -356,6 +402,7 @@ function rightbutton() {
 
 }
 function leftbutton() {
+    hidesearch();
     sideblpressed = true;
     sidebrpressed = false;
     if(monthnamecount > 0){
