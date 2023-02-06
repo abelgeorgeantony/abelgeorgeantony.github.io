@@ -1,4 +1,12 @@
-
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+}
+.bigdiv{
+    width: 100vw;
+    height: 100vh;
+}
 .YearBoxdiv{
     margin-top: 20px;
     text-align: center;

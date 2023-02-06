@@ -425,3 +425,19 @@ function sidebuttonsendi(mode) {
         document.querySelector('#rightmonthbutton').disabled = true;
     }
 }
+
+function loadimg(){
+    document.body.style.backgroundImage = "url('monthp1.jpg')";
+    document.body.style.backgroundImage = "url('monthp2.jpg')";
+    document.body.style.backgroundImage = "url('monthp3.jpg')";
+    document.body.style.backgroundImage = "url('monthp4.jpg')";
+    document.body.style.backgroundImage = "url('monthp5.jpg')";
+    document.body.style.backgroundImage = "url('monthp6.jpg')";
+    document.body.style.backgroundImage = "url('monthp7.jpg')";
+    document.body.style.backgroundImage = "url('monthp8.jpg')";
+    document.body.style.backgroundImage = "url('monthp9.jpg')";
+    document.body.style.backgroundImage = "url('monthp10.jpg')";
+    document.body.style.backgroundImage = "url('monthp11.jpg')";
+    document.body.style.backgroundImage = "url('monthp12.jpg')";
+    document.body.style.backgroundImage = "url('firstimg.jpg')";
+}
