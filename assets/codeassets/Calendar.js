@@ -430,7 +430,7 @@ function loadimg(){
 
         let promise = new Promise(function(resolve, reject) {
             document.body.style.backgroundImage = urlarr[i];
-            setTimeout(() => resolve("done"), 100000);
+            setTimeout(() => resolve("done"), 1000);
           });
           promise.then(i++);
 
