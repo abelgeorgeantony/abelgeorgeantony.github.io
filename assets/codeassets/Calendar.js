@@ -424,10 +424,16 @@ function sidebuttonsendi(mode) {
 
 function loadimg(){
     let i=0;
-    
     hideeverything();
-    for(i=0;i<13;i++){
+    while(i<13){
         document.body.style.backgroundImage = urlarr[i];
+
+        let promise = new Promise(function(resolve, reject) {
+            document.body.style.backgroundImage = urlarr[i];
+            setTimeout(() => resolve("done"), 100000);
+          });
+          promise.then(i++);
+
     }
     unhideeverything();
 }
