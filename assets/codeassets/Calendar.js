@@ -7,12 +7,42 @@ let monthnamecount = 0;
 let montharr = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 let monthname = montharr[monthnamecount];
 
+let urlarr = ["url('assets/imageassets/monthp1.jpg')",
+    "url('assets/imageassets/monthp2.jpg')",
+    "url('assets/imageassets/monthp3.jpg')",
+    "url('assets/imageassets/monthp4.jpg')",
+    "url('assets/imageassets/monthp5.jpg')",
+    "url('assets/imageassets/monthp6.jpg')",
+    "url('assets/imageassets/monthp7.jpg')",
+    "url('assets/imageassets/monthp8.jpg')",
+    "url('assets/imageassets/monthp9.jpg')",
+    "url('assets/imageassets/monthp10.jpg')",
+    "url('assets/imageassets/monthp11.jpg')",
+    "url('assets/imageassets/monthp12.jpg')",
+    "url('assets/imageassets/firstimg.jpg')"];
+
 
 function unhidesearch(){
     document.getElementById("yearinbutton").style.visibility = "visible";
 }
 function hidesearch(){
     document.getElementById("yearinbutton").style.visibility = "hidden";
+}
+function hideeverything(){
+    hidesearch();
+    document.getElementById("YearInput").style.visibility = "hidden";
+    document.getElementById("MonthBox").style.visibility = "hidden";
+    document.getElementById("leftmonthbutton").style.visibility = "hidden";
+    document.getElementById("rightmonthbutton").style.visibility = "hidden";
+    document.getElementById("monthtable").style.visibility = "hidden";
+}
+function unhideeverything(){
+    unhidesearch();
+    document.getElementById("YearInput").style.visibility = "visible";
+    document.getElementById("MonthBox").style.visibility = "visible";
+    document.getElementById("leftmonthbutton").style.visibility = "visible";
+    document.getElementById("rightmonthbutton").style.visibility = "visible";
+    document.getElementById("monthtable").style.visibility = "visible";
 }
 
 function Yearinput() {
@@ -293,42 +323,8 @@ function monthsetting(mode) {
 
     monthname = montharr[monthnamecount];
 
-    if(monthnamecount == 0){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp1.jpg')";
-    }
-    else if(monthnamecount == 1){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp2.jpg')";
-    }
-    else if(monthnamecount == 2){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp3.jpg')";
-    }
-    else if(monthnamecount == 3){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp4.jpg')";
-    }
-    else if(monthnamecount == 4){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp5.jpg')";
-    }
-    else if(monthnamecount == 5){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp6.jpg')";
-    }
-    else if(monthnamecount == 6){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp7.jpg')";
-    }
-    else if(monthnamecount == 7){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp8.jpg')";
-    }
-    else if(monthnamecount == 8){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp9.jpg')";
-    }
-    else if(monthnamecount == 9){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp10.jpg')";
-    }
-    else if(monthnamecount == 10){
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp11.jpg')";
-    }
-    else{
-        document.body.style.backgroundImage = "url('assets/imageassets/monthp12.jpg')";
-    }
+    document.body.style.backgroundImage = urlarr[monthnamecount];
+
 
     stoplimitsetter();
 
@@ -427,17 +423,11 @@ function sidebuttonsendi(mode) {
 }
 
 function loadimg(){
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp1.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp2.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp3.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp4.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp5.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp6.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp7.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp8.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp9.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp10.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp11.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/monthp12.jpg')";
-    document.body.style.backgroundImage = "url('assets/imageassets/firstimg.jpg')";
+    let i=0;
+    
+    hideeverything();
+    for(i=0;i<13;i++){
+        document.body.style.backgroundImage = urlarr[i];
+    }
+    unhideeverything();
 }
