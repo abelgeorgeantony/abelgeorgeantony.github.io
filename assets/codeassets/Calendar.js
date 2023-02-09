@@ -22,13 +22,13 @@ let urlarr = ["url('assets/imageassets/monthp1.jpg')",
     "url('assets/imageassets/firstimg.jpg')"];
 
 
-function unhidesearch(){
+function unhidesearch() {
     document.getElementById("yearinbutton").style.visibility = "visible";
 }
-function hidesearch(){
+function hidesearch() {
     document.getElementById("yearinbutton").style.visibility = "hidden";
 }
-function hideeverything(){
+function hideeverything() {
     hidesearch();
     document.getElementById("YearInput").style.visibility = "hidden";
     document.getElementById("MonthBox").style.visibility = "hidden";
@@ -36,8 +36,8 @@ function hideeverything(){
     document.getElementById("rightmonthbutton").style.visibility = "hidden";
     document.getElementById("monthtable").style.visibility = "hidden";
 }
-function unhideeverything(){
-    unhidesearch();
+function unhideeverything() {
+    
     document.getElementById("YearInput").style.visibility = "visible";
     document.getElementById("MonthBox").style.visibility = "visible";
     document.getElementById("leftmonthbutton").style.visibility = "visible";
@@ -46,7 +46,7 @@ function unhideeverything(){
 }
 
 function Yearinput() {
-   
+
     tablereset();
     tablevalreset();
     startingday = 0; year = 0; days = 0;
@@ -151,8 +151,14 @@ function damprinter(mode) {
     for (i = 1; i < 7; i++) {
         cell = document.getElementById("monthtable").rows[i].cells;
         for (j = fjs; j < 7; j++) {
+            
+            if(j==0){
+                cell[j].innerHTML = "<span style='color: red;'>"+r+"</span>";
+            }
+            else {
+                cell[j].innerHTML = r;
+            }
 
-            cell[j].innerHTML = r;
             r++;
             if (r == stoplimit) {
 
@@ -323,6 +329,7 @@ function monthsetting(mode) {
 
     monthname = montharr[monthnamecount];
 
+    loadimg();
     document.body.style.backgroundImage = urlarr[monthnamecount];
 
 
@@ -384,13 +391,12 @@ function monthdecr() {
 }
 
 function rightbutton() {
-    hidesearch();
     sidebrpressed = true;
     sideblpressed = false;
     if (monthnamecount < 11) {
         damprinter("increment");
     }
-    else if(monthnamecount == 11){
+    else if (monthnamecount == 11) {
         year++;
         document.getElementById("YearInput").value = year;
         damprinter("increment");
@@ -398,13 +404,12 @@ function rightbutton() {
 
 }
 function leftbutton() {
-    hidesearch();
     sideblpressed = true;
     sidebrpressed = false;
-    if(monthnamecount > 0){
-    damprinter("decrement");
+    if (monthnamecount > 0) {
+        damprinter("decrement");
     }
-    else if(monthnamecount == 0){
+    else if (monthnamecount == 0) {
         year--;
         document.getElementById("YearInput").value = year;
         damprinter("decrement");
@@ -422,17 +427,17 @@ function sidebuttonsendi(mode) {
     }
 }
 
-function loadimg(){
-    let i=0;
+function loadimg() {
+    let i = 0;
     hideeverything();
-    while(i<13){
-        document.body.style.backgroundImage = urlarr[i];
+    while (i < 13) {
 
-        let promise = new Promise(function(resolve, reject) {
+
+        let promise = new Promise(function (resolve, reject) {
             document.body.style.backgroundImage = urlarr[i];
             setTimeout(() => resolve("done"), 1000);
-          });
-          promise.then(i++);
+        });
+        promise.then(i++);
 
     }
     unhideeverything();
