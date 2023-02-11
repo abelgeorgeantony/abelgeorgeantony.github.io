@@ -51,9 +51,9 @@ function loadimghard(){
         rightbutton();
     }
     i=0;
-    for(i=0;i<11;i++){
-        leftbutton();
-    }
+    //for(i=0;i<11;i++){
+    //    leftbutton();
+    //}
 }
 
 function Yearinput() {
