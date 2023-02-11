@@ -45,7 +45,7 @@ function unhideeverything() {
     document.getElementById("monthtable").style.visibility = "visible";
 }
 
-function loadimghard(){
+function loadimg(){
     let i=0;
     for(i=0;i<11;i++){
         rightbutton();
@@ -70,7 +70,7 @@ function Yearinput() {
         damprinter("startingmonthnochange");
         sidebuttonsendi("enable");
         hidesearch();
-        loadimghard();
+        loadimg();
     }
     else {
         console.log("null : No year entered");
@@ -341,7 +341,6 @@ function monthsetting(mode) {
 
     monthname = montharr[monthnamecount];
 
-    //loadimg();
     document.body.style.backgroundImage = urlarr[monthnamecount];
 
 
@@ -439,18 +438,4 @@ function sidebuttonsendi(mode) {
     }
 }
 
-function loadimg() {
-    let i = 0;
-    hideeverything();
-    while (i < 13) {
 
-
-        let promise = new Promise(function (resolve, reject) {
-            document.body.style.backgroundImage = urlarr[i];
-            setTimeout(() => resolve("done"), 1000);
-        });
-        promise.then(i++);
-
-    }
-    unhideeverything();
-}
