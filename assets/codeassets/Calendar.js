@@ -44,14 +44,18 @@ function unhideeverything() {
     document.getElementById("rightmonthbutton").style.visibility = "visible";
     document.getElementById("monthtable").style.visibility = "visible";
 }
-
+function onLoad(){
+    hideeverything();
+    document.body.style.backgroundImage = urlarr[12];
+    unhideeverything();
+}
 function loadimg(){
     let i=0;
-    for(i=0;i<11;i++){
+    for(i=0;i<12;i++){
         rightbutton();
     }
     i=0;
-    for(i=0;i<11;i++){
+    for(i=0;i<12;i++){
         leftbutton();
     }
 }
