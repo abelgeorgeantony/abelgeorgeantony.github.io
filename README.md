@@ -23,7 +23,7 @@ than making a simple project, complex and having the will to complete it.<br>
 year - used to store the year given by user<br>
 days - to store the total days in a given year<br>
 startingday - to store the starting week day corresponding number<br>
-fjs<br>
+fjs - to store the fake j start<br>
 pfjs<br>
 numofdayincm<br>
 numofdayinpm<br>
