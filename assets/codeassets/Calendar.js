@@ -45,6 +45,17 @@ function unhideeverything() {
     document.getElementById("monthtable").style.visibility = "visible";
 }
 
+function loadimghard(){
+    let i=0;
+    for(i=0;i<11;i++){
+        rightbutton();
+    }
+    i=0;
+    for(i=0;i<11;i++){
+        leftbutton();
+    }
+}
+
 function Yearinput() {
 
     tablereset();
@@ -59,6 +70,7 @@ function Yearinput() {
         damprinter("startingmonthnochange");
         sidebuttonsendi("enable");
         hidesearch();
+        loadimghard();
     }
     else {
         console.log("null : No year entered");
@@ -329,7 +341,7 @@ function monthsetting(mode) {
 
     monthname = montharr[monthnamecount];
 
-    loadimg();
+    //loadimg();
     document.body.style.backgroundImage = urlarr[monthnamecount];
 
 
