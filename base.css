@@ -28,7 +28,7 @@ body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: FixedSys, monospace;
-    font-size: 28px !important;
+    font-size: 28px;
 }
 
 p,
@@ -74,4 +74,10 @@ ul {
     background-color: var(--background);
     margin: 4px 0;
     padding: 1px;
+}
+
+#figlet-container {
+    font-family: "Courier New", Courier, monospace !important;
+    font-size: 28px;
+    white-space: pre; /* Essential for preserving FIGlet spaces */
 }
