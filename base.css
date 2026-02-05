@@ -1,0 +1,77 @@
+@font-face {
+    font-family: FixedSys; /* set name */
+    src: url("fonts/FixedSys.woff2") format("woff2"); /* url of the font */
+}
+
+:root {
+    --background: #66ff66;
+    --foreground: #282828;
+}
+[data-theme="dark"] {
+    --background: #282828;
+    --foreground: #00ff66;
+}
+
+.hidden {
+    display: none !important;
+}
+.no-select {
+    /* Safari */
+    -webkit-user-select: none;
+    /* IE 10 and IE 11 */
+    -ms-user-select: none;
+    /* Standard syntax */
+    user-select: none;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: FixedSys, monospace;
+    font-size: 28px !important;
+}
+
+p,
+div {
+    margin: 0;
+}
+a {
+    color: #0000ee;
+}
+ul {
+    list-style-type: none;
+    /* Optional: removes default browser indentation */
+    padding: 0;
+    margin: 0;
+}
+
+#custom-menu {
+    position: absolute; /* Position relative to the viewport */
+    background-color: var(--foreground);
+    color: var(--background);
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 0.8%;
+    margin: 0;
+    list-style: none;
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
+
+#custom-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: solid 3px var(--background);
+}
+
+#custom-menu li {
+    padding: 0 10px 0 10px;
+    cursor: pointer;
+}
+
+#custom-menu .separator {
+    height: 1px;
+    background-color: var(--background);
+    margin: 4px 0;
+    padding: 1px;
+}
