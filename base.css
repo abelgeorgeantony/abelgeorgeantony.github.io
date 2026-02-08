@@ -1,6 +1,6 @@
 @font-face {
     font-family: FixedSys; /* set name */
-    src: url("fonts/FixedSys.woff2") format("woff2"); /* url of the font */
+    src: url("assets/fonts/FixedSys.woff2") format("woff2"); /* url of the font */
 }
 
 :root {
@@ -78,6 +78,9 @@ ul {
 
 #figlet-container {
     font-family: "Courier New", Courier, monospace !important;
-    font-size: 28px;
+    font-size: 23.5px !important;
     white-space: pre; /* Essential for preserving FIGlet spaces */
+    line-height: 1;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }

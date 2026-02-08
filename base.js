@@ -14,16 +14,17 @@ document.addEventListener("click", (e) => {
   customContextMenu.classList.add("hidden");
 });
 // 3. Toggle dark mode
-function toggleTheme() {
+document.getElementById("toggleThemeButton").addEventListener("click", (e) => {
   if (document.body.dataset.theme === "dark") {
     document.body.dataset.theme = "light";
-    customContextMenu;
+    document.getElementById("toggleThemeButton").innerText = "Dark Mode";
   } else {
     document.body.dataset.theme = "dark";
+    document.getElementById("toggleThemeButton").innerText = "Light Mode";
   }
-}
+});
 
-const textFilesPath = "/assets/titles/"; // Change to your folder path
+const textFilesPath = "/assets/figlet_titles/"; // Change to your folder path
 const container = document.getElementById("figlet-container");
 /**
  * Calculates the exact character width integer
@@ -37,7 +38,7 @@ function getExactFitSize() {
   const context = canvas.getContext("2d");
 
   // 2. MUST match your CSS exactly
-  context.font = '28px "Courier New", monospace';
+  context.font = '23.5px "Courier New", monospace';
 
   // 3. Measure one character
   const charWidth = context.measureText("X").width;
@@ -58,7 +59,43 @@ function getExactFitSize() {
   } else if (toPassToFold < 9) {
     return toPassToFold + 3;
   } else {
-    return toPassToFold + 4;
+    return toPassToFold + 5;
   }
   return toPassToFold;
 }
+const titleTypes = {
+  name: {
+    content: "Abel George Antony",
+    length: 18,
+  },
+};
+async function fetchTitle(titleTypeName = "name") {
+  const titleType = titleTypes[titleTypeName];
+  console.log(titleType);
+  const neededSize = getExactFitSize();
+  if (Number(neededSize) > Number(titleType.length)) {
+    const fileName = Number(titleType.length) + ".txt";
+    const response = await fetch(
+      "/assets/figlet_titles/" + titleTypeName + "/" + fileName,
+    );
+    if (!response.ok) throw new Error("File missing");
+    const text = await response.text();
+    document.getElementById("figlet-container").textContent = text;
+  } else {
+    const fileName = Number(neededSize) + ".txt";
+    const response = await fetch(
+      "/assets/figlet_titles/" + titleTypeName + "/" + fileName,
+    );
+    if (!response.ok) throw new Error("File missing");
+    const text = await response.text();
+    document.getElementById("figlet-container").textContent = text;
+  }
+}
+
+window.onresize = () => {
+  fetchTitle();
+};
+window.onload = () => {
+  console.log("Page loaded");
+  fetchTitle();
+};
