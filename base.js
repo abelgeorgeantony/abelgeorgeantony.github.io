@@ -30,7 +30,7 @@ const container = document.getElementById("figlet-container");
  * Calculates the exact character width integer
  */
 function getExactFitSize() {
-  const padding = 5; // Safety buffer for scrollbars/margins
+  const padding = 10; // Safety buffer for scrollbars/margins
   const minSize = 20; // Minimum readable width (prevents requesting name1.txt)
 
   // 1. Setup Canvas to measure
@@ -38,13 +38,15 @@ function getExactFitSize() {
   const context = canvas.getContext("2d");
 
   // 2. MUST match your CSS exactly
-  context.font = '23.5px "Courier New", monospace';
+  context.font = window.getComputedStyle(
+    document.getElementById("figlet-container"),
+  ).font;
 
   // 3. Measure one character
   const charWidth = context.measureText("X").width;
 
   // 4. Calculate raw fit
-  const rawColumns = Math.floor((window.innerWidth - padding) / charWidth);
+  const rawColumns = Math.round((window.innerWidth - padding) / charWidth);
 
   // 5. Return the calculated size, but never go below minSize
   //return Math.max(minSize, rawColumns);
@@ -54,12 +56,13 @@ function getExactFitSize() {
 
   console.log(rawColumns / 7);
   const toPassToFold = Math.round(rawColumns / 7);
-  if (toPassToFold < 7) {
-    return toPassToFold + 2;
-  } else if (toPassToFold < 9) {
-    return toPassToFold + 3;
-  } else {
+  console.log(toPassToFold);
+  if (toPassToFold < 6) {
+    return toPassToFold + 4;
+  } else if (toPassToFold < 8) {
     return toPassToFold + 5;
+  } else {
+    return toPassToFold + 6;
   }
   return toPassToFold;
 }
@@ -71,7 +74,6 @@ const titleTypes = {
 };
 async function fetchTitle(titleTypeName = "name") {
   const titleType = titleTypes[titleTypeName];
-  console.log(titleType);
   const neededSize = getExactFitSize();
   if (Number(neededSize) > Number(titleType.length)) {
     const fileName = Number(titleType.length) + ".txt";
@@ -99,3 +101,7 @@ window.onload = () => {
   console.log("Page loaded");
   fetchTitle();
 };
+
+function print() {
+  console.log("hi");
+}
