@@ -45,6 +45,12 @@ ul {
     margin: 0;
 }
 
+.horizontal-seperator {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #custom-menu {
     position: absolute; /* Position relative to the viewport */
     background-color: var(--foreground);
