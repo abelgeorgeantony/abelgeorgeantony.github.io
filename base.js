@@ -36,6 +36,7 @@ function getFittableCharacterCount(element) {
   const context = canvas.getContext("2d");
   // 2. MUST match your CSS exactly
   context.font = window.getComputedStyle(element).font;
+  console.log(context.font);
   // 3. Measure one character
   const charWidth = context.measureText("X").width;
   // 4. Calculate raw fit
