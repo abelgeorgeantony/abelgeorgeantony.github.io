@@ -1,6 +1,10 @@
+---
+---
+
+
 @font-face {
     font-family: FixedSys; /* set name */
-    src: url("{{ '/assets/fonts/FixedSys.woff2' | prepend: site.url }}") format("woff2"); /* url of the font */
+    src: url("{{ site.url }}/assets/fonts/FixedSys.woff2") format("woff2"); /* url of the font */
 }
 
 :root {
