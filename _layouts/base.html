@@ -12,6 +12,10 @@
       {% endfor %}
     {% endif %}
 
+    <script>
+      // This allows all your external JS files to know if they are in a sub-directory
+      const siteBaseUrl = "{{ site.baseurl }}"; 
+    </script>
     <script src="{{ '/assets/js/base.js' | relative_url }}" defer></script>
     <script src="{{ '/assets/js/cursor.js' | relative_url }}" defer></script>
 
