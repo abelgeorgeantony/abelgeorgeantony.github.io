@@ -2,10 +2,40 @@
 permalink: /
 layout: base
 title: About Me
+scripts:
+- /gallery/assets/js/dithering.js
 ---
 
-        <main>
-        <p>Hello! I am Abel George Antony and I come from the
-            <a href="https://en.wikipedia.org/wiki/Kuttanad">lowest altitude in India</a>.
+<main>
+    <div class="hero-section">
+        <img src="/gallery/assets/images/passportsizephoto.jpg" alt="A picture of me" id="hero-picture">
+        <div>&nbsp;</div>
+        <p>Hello! My name is Abel George Antony.<br>
+            I am
+            <script>document.write(Math.abs(new Date(new Date() - new Date(2005, 3, 22)).getUTCFullYear() - 1970))</script>
+            years old.<br>Just a boy from the <a href="https://en.wikipedia.org/wiki/Kuttanad">lowest
+                altitude in India</a>.<br>
         </p>
-        </main>
+    </div>
+    <div class="second-section">
+        <div>
+            <p>
+                This is not a portfolio, you won't find a resume or trendy buzzwords here. This is just my personal
+                corner in
+                the internet. Part of the inspiration for a site like this is the old
+                internet, where people had their own weird, hand-coded websites for no particular reason other than to
+                just
+                exist online. So, I built one(one of the many I've made over the years; most of the old ones have been
+                lost in
+                the digital void). There is no objective here, no target audience, and nobody is trying
+                to impress you about anything.
+            My interests are kind of all over the place.
+            If you made it here, feel free to look around. It's mostly things you probably won't find interesting. If it
+            does
+            interest you, reach out to me! We could chat.
+            </p>
+        </div>
+        
+        <img src="/gallery/assets/images/attomshouse.jpg" alt="Me when I was happy" id="crazy-picture">
+    </div>
+</main>

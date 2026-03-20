@@ -52,3 +52,8 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+exclude:
+  - gallery/vendor
+  - gallery/_site
+  - gallery/.git
+  - vendor # Good practice to exclude the main repo's vendor folder too, if you have one

@@ -2,6 +2,10 @@ const customContextMenu = document.getElementById("custom-menu");
 
 // 1. Prevent the default context menu and display the custom one
 document.addEventListener("contextmenu", (e) => {
+  console.log(e.target)
+  if(e.target.tagName === "IMG") {
+    return; // Allow default context menu on images
+  }
   e.preventDefault(); // Prevents the browser's default menu
 
   // Position the custom menu at the cursor location
@@ -106,8 +110,58 @@ window.onload = () => {
   console.log("Page loaded");
   fetchTitle();
   updateHorizontalSeperators();
+  applyRetroDither("hero-picture");
+  applyRetroDither("crazy-picture")
 };
 
-function print() {
-  console.log("hi");
+
+function applyRetroDither(imgid) {
+    const img = document.getElementById(imgid);
+    if (!img) return;
+
+    function processDither() {
+        if (typeof bayerDither !== 'function') return;
+
+        // Prevent infinite loops: Changing img.src triggers the 'load' event again.
+        // If we've already processed this image, exit immediately.
+        if (img.dataset.processed) return;
+        
+        // Mark as processed and save the original normal image path
+        img.dataset.processed = "true";
+        img.dataset.originalSrc = img.src; 
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const retroPalette = [[102, 255, 102], [40, 40, 40]]; 
+
+        bayerDither(ctx, imageData, retroPalette, 2);
+        
+        // Save the generated dithered data and apply it
+        img.dataset.ditheredSrc = canvas.toDataURL(); 
+        img.src = img.dataset.ditheredSrc; 
+        img.dataset.isDithered = "true"; 
+
+        // Listen for clicks to swap between the saved sources
+        img.addEventListener('click', () => {
+            if (img.dataset.isDithered === "true") {
+                img.src = img.dataset.originalSrc;
+                img.dataset.isDithered = "false";
+            } else {
+                img.src = img.dataset.ditheredSrc;
+                img.dataset.isDithered = "true";
+            }
+        });
+    }
+
+    if (img.complete) {
+        processDither();
+    } else {
+        img.addEventListener('load', processDither);
+    }
 }
