@@ -81,7 +81,7 @@ function resetBlinkTimer() {
 
 // 3. The Globally Rigid Mouse Movement
 // Because the layout is now mathematically disciplined, simple division works flawlessly.
-document.addEventListener('mousemove', (e) => {
+/*document.addEventListener('mousemove', (e) => {
     const relX = e.pageX - offsetX;
     const relY = e.pageY - offsetY;
 
@@ -92,7 +92,7 @@ document.addEventListener('mousemove', (e) => {
     const finalY = snappedY + offsetY;
 
     cursor.style.transform = `translate(${finalX}px, ${finalY}px)`;
-});
+});*/
 
 
 // Detect when the mouse actually leaves the browser window
@@ -158,3 +158,23 @@ document.addEventListener('scroll', () => {
     updateCursorPosition();
     resetBlinkTimer();
 });
+
+
+
+// Hide the terminal cursor when hovering over the custom context menu
+const customMenu = document.getElementById('custom-menu').children[0];
+
+if (customMenu) {
+    customMenu.addEventListener('mouseenter', () => {
+        cursor.style.visibility = 'hidden';
+    });
+    
+    customMenu.addEventListener('mouseleave', () => {
+        // Bring it back when the mouse leaves the menu
+        cursor.style.visibility = 'visible'; 
+        
+        // Optional: Instantly snap it to the new position so it doesn't 
+        // look like it "jumped" from where it entered the menu
+        updateCursorPosition(); 
+    });
+}
