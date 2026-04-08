@@ -111,7 +111,18 @@ window.onload = () => {
   fetchTitle();
   updateHorizontalSeperators();
   applyRetroDither("hero-picture");
-  applyRetroDither("crazy-picture")
+  applyRetroDither("crazy-picture");
+
+  const loader = document.getElementById('instant-loader');
+  if (loader) {
+    // Add the class that triggers the CSS fade-out transition
+    loader.classList.add('loader-hidden');
+
+    // Optional: completely remove it from the DOM after the fade transition finishes
+    setTimeout(function () {
+      loader.remove();
+    }, 400); // 400ms matches the CSS transition time
+  }
 };
 
 
@@ -149,7 +160,7 @@ function applyRetroDither(imgid) {
 
     // Listen for clicks to swap between the saved sources
     if (img.classList.contains("web-badge")) {
-      img.addEventListener('hover', () => {});
+      img.addEventListener('hover', () => { });
     }
     else {
       img.addEventListener('click', () => {

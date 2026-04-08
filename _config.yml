@@ -56,4 +56,6 @@ exclude:
   - gallery/vendor
   - gallery/_site
   - gallery/.git
-  - vendor # Good practice to exclude the main repo's vendor folder too, if you have one
+  - vendor
+  - _site
+  - .git

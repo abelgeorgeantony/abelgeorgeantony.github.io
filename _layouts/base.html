@@ -4,6 +4,48 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <style>
+  /* Base styles to reset margin and ensure it covers the screen */
+  #instant-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #66ff66; /* Matches a plain background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999; /* Ensure it stays on top of everything */
+    transition: opacity 0.4s ease; /* Smooth fade out */
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  #instant-loader h1 {
+    overflow: hidden;
+    border-right: .15em solid orange; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+    animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+  }
+  @keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: orange; }
+}
+  /* Utility class added by JS to hide the loader */
+  .loader-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
     <link rel="stylesheet" href="{{ '/assets/css/base.css' | relative_url }}" />
 
     {% if page.stylesheets %}
@@ -30,6 +72,11 @@
     {% seo title=false %}
   </head>
   <body>
+    <div id="instant-loader">
+      <h1>
+      WAKE UP, NEO
+      </h1>
+    </div>
     <div id="nav-bar">
       <a href="/">Home</a>
       <a href="/gallery/">Gallery</a>
@@ -47,7 +94,7 @@
     </main>
     <div class="horizontal-seperator" data-separatorsymbol="-"></div>
     <footer>
-      <a href="https://www.instagram.com/abelgeorgeantony">instagram.com/abelgeorgeantony</a> | <a href="https://github.com/abelgeorgeantony">github.com/abelgeorgeantony</a>
+      <a href="mailto:social.abelgeorgeantony@gmail.com">social.abelgeorgeantony@gmail.com</a> | <a href="https://www.instagram.com/abelgeorgeantony">instagram.com/abelgeorgeantony</a> | <a href="https://github.com/abelgeorgeantony">github.com/abelgeorgeantony</a>
     </footer>
 
     <div id="custom-menu" class="hidden no-select">
