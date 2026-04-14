@@ -1,10 +1,3 @@
----
----
-@font-face {
-    font-family: FixedSys; /* set name */
-    src: url("{{ '/assets/fonts/FixedSys.woff2' | relative_url }}") format("woff2"); /* url of the font */
-}
-
 :root {
     --background: #66ff66;
     --foreground: #282828;
@@ -95,7 +88,7 @@ ul {
     padding-right: 0.7ch;
 }
 
-#custom-menu {
+#customContextMenu {
     position: absolute; /* Position relative to the viewport */
     background-color: var(--foreground);
     color: var(--background);
@@ -105,31 +98,37 @@ ul {
     z-index: 1000; /* Ensure it's on top of other elements */
 }
 
-#custom-menu ul {
+#customContextMenu ul {
     list-style: none;
     padding: 0;
     margin: 0;
     border: solid 3px var(--background);
 }
 
-#custom-menu li {
+#customContextMenu li {
     padding: 0 10px 0 10px;
     cursor: pointer;
 }
 /* Invert the colors on hover to create a solid selection block */
-#custom-menu li:hover {
+#customContextMenu li:hover {
     background-color: var(--background);
     color: var(--foreground);
 }
+#customContextMenu div {
+    margin-top: 2px;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+}
 
-#custom-menu .separator {
+#customContextMenu .separator {
     height: 1px;
     background-color: var(--background);
     margin: 4px 0;
     padding: 1px;
 }
 
-#figlet-container {
+#figletContainer {
     font-family: "Courier New", Courier, monospace !important;
     font-size: 23.5px !important;
     white-space: pre; /* Essential for preserving FIGlet spaces */

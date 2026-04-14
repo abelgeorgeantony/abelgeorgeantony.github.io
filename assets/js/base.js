@@ -1,35 +1,56 @@
-const customContextMenu = document.getElementById("custom-menu");
+let wasMenuOpen = false;
+document.addEventListener("mousedown", (e) => {
+  // Take a snapshot of the menu's state the moment the user clicks down
+  wasMenuOpen = !customContextMenu.classList.contains("hidden");
 
+  // e.button === 2 means it's a Right-Click
+  if (e.button === 2 && e.shiftKey) {
+    customContextMenu.classList.add("hidden");
+  }
+});
+document.addEventListener("click", (e) => {
+  customContextMenu.classList.add("hidden");
+});
 // 1. Prevent the default context menu and display the custom one
 document.addEventListener("contextmenu", (e) => {
   console.log(e.target)
+  customContextMenu.classList.add("hidden");
+  if (e.shiftKey) {
+    customContextMenu.classList.add("hidden");
+    return; // Allow the default menu to appear naturally
+  }
   if (e.target.tagName === "IMG") {
     return; // Allow default context menu on images
   }
   e.preventDefault(); // Prevents the browser's default menu
+
+  // If it was open when the user STARTED the right-click, hide it and stop.
+  if (wasMenuOpen) {
+    customContextMenu.classList.add("hidden");
+    wasMenuOpen = false;
+    return; 
+  }
+
 
   // Position the custom menu at the cursor location
   customContextMenu.style.top = `${e.pageY}px`;
   customContextMenu.style.left = `${e.pageX}px`;
   customContextMenu.classList.remove("hidden");
 });
-// 2. Hide the custom menu when clicking anywhere else
-document.addEventListener("click", (e) => {
-  customContextMenu.classList.add("hidden");
-});
-// 3. Toggle dark mode
-document.getElementById("toggleThemeButton").addEventListener("click", (e) => {
+
+// Toggle dark mode
+toggleThemeButton.addEventListener("click", (e) => {
   if (document.body.dataset.theme === "dark") {
     document.body.dataset.theme = "light";
-    document.getElementById("toggleThemeButton").innerText = "Dark Mode";
+    toggleThemeButton.innerText = "Dark Mode";
   } else {
     document.body.dataset.theme = "dark";
-    document.getElementById("toggleThemeButton").innerText = "Light Mode";
+    toggleThemeButton.innerText = "Light Mode";
   }
 });
 
+
 const textFilesPath = "/assets/figlet_titles/"; // Change to your folder path
-const container = document.getElementById("figlet-container");
 /**
  * Calculates the exact character width integer
  */
@@ -55,9 +76,7 @@ const titleTypes = {
 };
 async function fetchTitle(titleTypeName = "name") {
   const titleType = titleTypes[titleTypeName];
-  const rawColumns = getFittableCharacterCount(
-    document.getElementById("figlet-container"),
-  );
+  const rawColumns = getFittableCharacterCount(figletContainer);
   const minSize = 20; // Minimum readable width (prevents requesting name1.txt)
   if (rawColumns < minSize) {
     return 1;
@@ -78,7 +97,7 @@ async function fetchTitle(titleTypeName = "name") {
     );
     if (!response.ok) throw new Error("File missing");
     const text = await response.text();
-    document.getElementById("figlet-container").textContent = text;
+    figletContainer.textContent = text;
   } else {
     const fileName = Number(neededSize) + ".txt";
     const response = await fetch(
@@ -86,7 +105,7 @@ async function fetchTitle(titleTypeName = "name") {
     );
     if (!response.ok) throw new Error("File missing");
     const text = await response.text();
-    document.getElementById("figlet-container").textContent = text;
+    figletContainer.textContent = text;
   }
 }
 
@@ -113,14 +132,14 @@ window.onload = () => {
   applyRetroDither("hero-picture");
   applyRetroDither("crazy-picture");
 
-  const loader = document.getElementById('instant-loader');
-  if (loader) {
+  if (instantLoader) {
+    console.log("hi")
     // Add the class that triggers the CSS fade-out transition
-    loader.classList.add('loader-hidden');
+    instantLoader.classList.add('loader-hidden');
 
     // Optional: completely remove it from the DOM after the fade transition finishes
     setTimeout(function () {
-      loader.remove();
+      instantLoader.remove();
     }, 400); // 400ms matches the CSS transition time
   }
 };

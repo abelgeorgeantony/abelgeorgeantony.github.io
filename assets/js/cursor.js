@@ -26,15 +26,14 @@ function enforceBaselineGrid() {
 
     // B. The Secret: Quantize the rogue header
     // This calculates how many pixels the header needs to snap to the next 28px row
-    const figlet = document.getElementById('figlet-container');
-    if (figlet) {
-        figlet.style.marginBottom = '0px'; // Reset before measuring
-        const figHeight = figlet.getBoundingClientRect().height;
+    if (figletContainer) {
+        figletContainer.style.marginBottom = '0px'; // Reset before measuring
+        const figHeight = figletContainer.getBoundingClientRect().height;
         const remainder = figHeight % cellH;
 
         if (remainder !== 0) {
             const paddingNeeded = cellH - remainder;
-            figlet.style.marginBottom = `${paddingNeeded}px`;
+            figletContainer.style.marginBottom = `${paddingNeeded}px`;
         }
     }
 
@@ -56,7 +55,6 @@ window.addEventListener('load', enforceBaselineGrid);
 window.addEventListener('resize', enforceBaselineGrid);
 
 // Recalculate if your base.js fetchTitle() script injects new ASCII art
-const figletContainer = document.getElementById('figlet-container');
 if (figletContainer) {
     // This safely observes only text injection, preventing infinite loops
     const observer = new MutationObserver(enforceBaselineGrid);
@@ -78,22 +76,6 @@ function resetBlinkTimer() {
         cursor.classList.add('cursor-blink');
     }, 1000);
 }
-
-// 3. The Globally Rigid Mouse Movement
-// Because the layout is now mathematically disciplined, simple division works flawlessly.
-/*document.addEventListener('mousemove', (e) => {
-    const relX = e.pageX - offsetX;
-    const relY = e.pageY - offsetY;
-
-    const snappedX = Math.floor(relX / cellW) * cellW;
-    const snappedY = Math.floor(relY / cellH) * cellH;
-
-    const finalX = snappedX + offsetX;
-    const finalY = snappedY + offsetY;
-
-    cursor.style.transform = `translate(${finalX}px, ${finalY}px)`;
-});*/
-
 
 // Detect when the mouse actually leaves the browser window
 document.addEventListener('mouseout', (e) => {
@@ -162,14 +144,13 @@ document.addEventListener('scroll', () => {
 
 
 // Hide the terminal cursor when hovering over the custom context menu
-const customMenu = document.getElementById('custom-menu').children[0];
-
-if (customMenu) {
-    customMenu.addEventListener('mouseenter', () => {
+const customContextMenuList = customContextMenu.children[0];
+if (customContextMenuList) {
+    customContextMenuList.addEventListener('mouseenter', () => {
         cursor.style.visibility = 'hidden';
     });
     
-    customMenu.addEventListener('mouseleave', () => {
+    customContextMenuList.addEventListener('mouseleave', () => {
         // Bring it back when the mouse leaves the menu
         cursor.style.visibility = 'visible'; 
         
