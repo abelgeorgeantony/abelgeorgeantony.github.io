@@ -27,6 +27,9 @@
     /* Standard syntax */
     user-select: none;
 }
+.no-scroll {
+  overflow: hidden;
+}
 
 html {
     /* Forces the root element to be at least the height of the screen */
@@ -82,10 +85,13 @@ ul {
 #nav-bar a {
     width: fit-content;
     text-decoration-line: none;
-    border-left: 0.3ch solid var(--foreground);
+    /*border-left: 0.3ch solid var(--foreground);
     border-right: 0.3ch solid var(--foreground);
     padding-left: 0.7ch;
-    padding-right: 0.7ch;
+    padding-right: 0.7ch;*/
+}
+.nav-bar-seperator {
+    background-color: var(--foreground);
 }
 
 #customContextMenu {
@@ -115,10 +121,18 @@ ul {
     color: var(--foreground);
 }
 #customContextMenu div {
-    margin-top: 2px;
-    font-size: 1.8rem;
+    margin-top: 4px;
+    font-size: 1.6rem;
     display: flex;
     align-items: center;
+}
+#customContextMenu div .shift-key-character {
+    margin-top: 0px;
+    font-size: 2.4rem;
+    height: 0;
+}
+#customContextMenu div svg {
+    height: 1.6rem;
 }
 
 #customContextMenu .separator {

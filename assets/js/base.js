@@ -5,41 +5,43 @@ document.addEventListener("mousedown", (e) => {
 
   // e.button === 2 means it's a Right-Click
   if (e.button === 2 && e.shiftKey) {
-    customContextMenu.classList.add("hidden");
+    closeCustomContextMenu();
   }
 });
 document.addEventListener("click", (e) => {
-  customContextMenu.classList.add("hidden");
+  closeCustomContextMenu();
 });
 // 1. Prevent the default context menu and display the custom one
 document.addEventListener("contextmenu", (e) => {
-  console.log(e.target)
-  customContextMenu.classList.add("hidden");
+  closeCustomContextMenu();
   if (e.shiftKey) {
-    customContextMenu.classList.add("hidden");
+    closeCustomContextMenu();
     return; // Allow the default menu to appear naturally
   }
-  if (e.target.tagName === "IMG") {
+  if ((e.target.tagName === "IMG") || (e.target.tagName === "A")) {
     return; // Allow default context menu on images
+  }
+  if ((window.getSelection().toString().trim().length) > 0) {
+    return;
   }
   e.preventDefault(); // Prevents the browser's default menu
 
   // If it was open when the user STARTED the right-click, hide it and stop.
   if (wasMenuOpen) {
-    customContextMenu.classList.add("hidden");
+    closeCustomContextMenu();
     wasMenuOpen = false;
-    return; 
+    return;
   }
 
 
   // Position the custom menu at the cursor location
   customContextMenu.style.top = `${e.pageY}px`;
   customContextMenu.style.left = `${e.pageX}px`;
-  customContextMenu.classList.remove("hidden");
+  openCustomContextMenu();
 });
 
 // Toggle dark mode
-toggleThemeButton.addEventListener("click", (e) => {
+function toggleTheme() {
   if (document.body.dataset.theme === "dark") {
     document.body.dataset.theme = "light";
     toggleThemeButton.innerText = "Dark Mode";
@@ -47,7 +49,19 @@ toggleThemeButton.addEventListener("click", (e) => {
     document.body.dataset.theme = "dark";
     toggleThemeButton.innerText = "Light Mode";
   }
-});
+  setCookie("theme", document.body.dataset.theme, 30);
+}
+// Toggle the cursor (custom/default)
+function toggleCursor() {
+  if (document.body.dataset.cursor === "custom") {
+    document.body.dataset.cursor = "default";
+    toggleCursorButton.innerText = "Custom Cursor";
+  } else {
+    document.body.dataset.cursor = "custom";
+    toggleCursorButton.innerText = "Default Cursor";
+  }
+  setCookie("cursor", document.body.dataset.cursor, 30);
+}
 
 
 const textFilesPath = "/assets/figlet_titles/"; // Change to your folder path
@@ -126,12 +140,19 @@ window.onresize = () => {
   updateHorizontalSeperators();
 };
 window.onload = () => {
-  console.log("Page loaded");
   fetchTitle();
   updateHorizontalSeperators();
   applyRetroDither("hero-picture");
   applyRetroDither("crazy-picture");
 
+  if(getCookie("theme") === "dark") {
+    document.body.dataset.theme = "dark";
+    toggleThemeButton.innerText = "Light Mode";
+  }
+  if(getCookie("cursor") === "default") {
+    document.body.dataset.cursor = "default";
+    toggleCursorButton.innerText = "Custom Cursor";
+  }
   if (instantLoader) {
     console.log("hi")
     // Add the class that triggers the CSS fade-out transition

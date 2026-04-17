@@ -1,0 +1,39 @@
+---
+permalink: /posts/
+layout: base
+title: Posts
+---
+
+<main class="post-listing">
+    {% for post in site.posts %}
+    <article class="post-preview">
+        <p>
+            {{ post.title }}
+        </p>
+        <div class="post-excerpt">
+            <div>&nbsp;&nbsp;</div>
+            <div>
+                {{ post.excerpt }}
+            </div>
+        </div>
+
+        <div class="post-footer">
+            <a href="{{ post.url | relative_url }}" class="read-more">Read full post&gt;</a>&nbsp;|&nbsp;<p
+                class="post-meta">
+                Published on {{ post.date | date: "%b %-d, %Y" }}</p>
+        </div>
+    </article>
+    <!---<hr class="horizontal-seperator" data-separatorsymbol="-">--->
+    {% endfor %}
+</main>
+
+<style>
+    .post-excerpt {
+        display: flex;
+        flex-direction: row;
+    }
+    .post-footer {
+        display: flex;
+        flex-direction: row;
+    }
+</style>

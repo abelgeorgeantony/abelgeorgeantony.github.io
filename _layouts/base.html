@@ -44,7 +44,7 @@
   {% seo title=false %}
 </head>
 
-<body>
+<body data-theme="light" data-cursor="custom">
   <div id="instantLoader">
     <h1>
       LOADING
@@ -69,6 +69,7 @@
     // This allows all external JS files to know if they are in a sub-directory
     const siteBaseUrl = "{{ site.baseurl }}"; 
   </script>
+  <script src="{{ '/assets/js/utils.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/base.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/cursor.js' | relative_url }}" defer></script>
 
@@ -81,7 +82,9 @@
 
   <div id="nav-bar">
     <a href="/">Home</a>
+    <div class="nav-bar-seperator">&nbsp;</div>
     <a href="/gallery/">Gallery</a>
+    <div class="nav-bar-seperator">&nbsp;</div>
     <a href="/links/">Links</a>
   </div>
   <div id="figletContainer">
@@ -99,15 +102,14 @@
 
   <div id="customContextMenu" class="hidden no-select">
     <ul>
-      <li id="toggleThemeButton">Dark Mode</li>
-      <!--- <li class="separator"></li> --->
-      <li onclick="">Save As</li>
+      <li id="toggleThemeButton" onclick="toggleTheme()">Dark Mode</li>
+      <li id="toggleCursorButton" onclick="toggleCursor()">Default Cursor</li>
     </ul>
     <div>
-      &#9432;&nbsp;default menu &#8679;&#43;
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-        class="lucide lucide-mouse-right-icon lucide-mouse-right">
+      &#9432;&nbsp;default menu&nbsp;
+      <div class="shift-key-character">&#8679;</div>&#43;
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mouse-right-icon lucide-mouse-right">
         <path d="M12 7.318V10" />
         <path d="M19 10v5a7 7 0 0 1-14 0V9c0-3.527 2.608-6.515 6-7" />
         <circle cx="17" cy="4" r="2" />
