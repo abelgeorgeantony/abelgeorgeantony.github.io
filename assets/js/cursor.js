@@ -23,6 +23,7 @@ function enforceBaselineGrid() {
     cellW = rect.width;
     cellH = rect.height; // Exact height of the text row (28)
     document.body.removeChild(tester);
+    quantizeImages();
 
     // B. The Secret: Quantize the rogue header
     // This calculates how many pixels the header needs to snap to the next 28px row
