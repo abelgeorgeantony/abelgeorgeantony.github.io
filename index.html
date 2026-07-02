@@ -4,9 +4,11 @@ layout: base
 title: About Me
 ---
 
+{% assign gallery_assets_url = site.gallery_assets_url | default: '/gallery/assets' %}
+
 <main>
     <div class="hero-section">
-        <img src="/gallery/assets/images/passportsizephoto.jpg" alt="A picture of me" id="hero-picture">
+        <img src="{{ gallery_assets_url }}/images/passportsizephoto.jpg" alt="A picture of me" id="hero-picture">
         <div>&nbsp;</div>
         <p>Hello!<br>My name is Abel George Antony.<br>
             I am
@@ -34,6 +36,6 @@ title: About Me
             </p>
         </div>
         
-        <img src="/gallery/assets/images/attomshouse.jpg" alt="Me when I was happy" id="crazy-picture">
+        <img src="{{ gallery_assets_url }}/images/attomshouse.jpg" alt="Me when I was happy" id="crazy-picture">
     </div>
 </main>

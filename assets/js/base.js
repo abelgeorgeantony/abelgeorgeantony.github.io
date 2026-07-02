@@ -107,7 +107,7 @@ async function fetchTitle(titleTypeName = "name") {
   if (Number(neededSize) > Number(titleType.length)) {
     const fileName = Number(titleType.length) + ".txt";
     const response = await fetch(
-      "/assets/figlet_titles/" + titleTypeName + "/" + fileName,
+      siteBaseUrl + "/assets/figlet_titles/" + titleTypeName + "/" + fileName,
     );
     if (!response.ok) throw new Error("File missing");
     const text = await response.text();
