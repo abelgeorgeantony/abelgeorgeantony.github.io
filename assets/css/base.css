@@ -160,10 +160,10 @@ ul {
     flex-direction: row;
 }
 #hero-picture {
-    height: 21rem
+    height: 24ch;
 }
 #crazy-picture {
-    height: 28rem;
+    height: 32ch;
     width: 36ch;
     object-fit: cover;
 }
