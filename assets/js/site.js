@@ -147,11 +147,15 @@ function updateHorizontalSeperators() {
 window.addEventListener("resize", () => {
   fetchTitle();
   updateHorizontalSeperators();
+  enforceBaselineGrid();
+  quantizeImages();
 });
 
 window.addEventListener("load", () => {
   fetchTitle();
   updateHorizontalSeperators();
+  enforceBaselineGrid();
+  quantizeImages();
   applyRetroDither("hero-picture");
   applyRetroDither("crazy-picture");
 

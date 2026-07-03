@@ -23,7 +23,6 @@ function enforceBaselineGrid() {
     cellW = rect.width;
     cellH = rect.height; // Exact height of the text row (28)
     document.body.removeChild(tester);
-    quantizeImages();
 
     // B. The Secret: Quantize the rogue header
     // This calculates how many pixels the header needs to snap to the next 28px row
@@ -51,9 +50,6 @@ function enforceBaselineGrid() {
     document.body.style.marginRight = `${leftoverPixels}px`;
 }
 
-// 2. Initialize the layout grid
-window.addEventListener('load', enforceBaselineGrid);
-window.addEventListener('resize', enforceBaselineGrid);
 
 // Recalculate if your base.js fetchTitle() script injects new ASCII art
 if (figletContainer) {

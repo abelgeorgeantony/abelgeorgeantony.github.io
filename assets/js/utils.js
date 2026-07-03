@@ -44,3 +44,22 @@ function closeCustomContextMenu() {
     customContextMenu.classList.add("hidden");
     document.body.classList.remove("no-scroll");
 }
+
+
+function quantizeImages() {
+  const images = document.querySelectorAll("img:not(.icon)");
+
+  images.forEach((img) => {
+    img.style.width = "";
+    img.style.height = "";
+
+    const rect = img.getBoundingClientRect();
+    const snappedWidth = Math.ceil(rect.width / cellW) * cellW;
+    const snappedHeight = Math.ceil(rect.height / cellH) * cellH;
+
+    img.style.width = `${snappedWidth}px`;
+    img.style.height = `${snappedHeight}px`;
+    img.style.objectFit = "cover";
+    img.style.display = "block";
+  });
+}
