@@ -4,6 +4,7 @@
     --link-color: #0000ee;
     --cursor-color: var(--background);
 }
+
 [data-theme="dark"] {
     --background: #282828;
     --foreground: #00ff66;
@@ -19,6 +20,7 @@
 .hidden {
     display: none !important;
 }
+
 .no-select {
     /* Safari */
     -webkit-user-select: none;
@@ -27,13 +29,14 @@
     /* Standard syntax */
     user-select: none;
 }
+
 .no-scroll {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 html {
     /* Forces the root element to be at least the height of the screen */
-    min-height: 100vh; 
+    min-height: 100vh;
     scrollbar-width: none;
 }
 
@@ -45,15 +48,18 @@ body {
     font-family: FixedSys, monospace;
     font-size: 28px;
     line-height: 1;
+    overflow-wrap: break-word;
 }
 
 p,
 div {
     margin: 0;
 }
+
 a {
     color: var(--link-color);
 }
+
 ul {
     list-style-type: none;
     /* Optional: removes default browser indentation */
@@ -66,6 +72,7 @@ ul {
     /*margin-left: auto;
     margin-right: auto;*/
 }
+
 .mono-spaced-div {
     width: 28px;
 }
@@ -78,10 +85,12 @@ ul {
     height: 2ch;
     background-color: var(--background);
     color: var(--foreground);
-    z-index: 666; /* Ensure it's on top of other elements */
+    z-index: 666;
+    /* Ensure it's on top of other elements */
     display: flex;
     flex-direction: row;
 }
+
 #nav-bar a {
     width: fit-content;
     text-decoration-line: none;
@@ -90,18 +99,21 @@ ul {
     padding-left: 0.7ch;
     padding-right: 0.7ch;*/
 }
+
 .nav-bar-seperator {
     background-color: var(--foreground);
 }
 
 #customContextMenu {
-    position: absolute; /* Position relative to the viewport */
+    position: absolute;
+    /* Position relative to the viewport */
     background-color: var(--foreground);
     color: var(--background);
     padding: 0.8%;
     margin: 0;
     list-style: none;
-    z-index: 1000; /* Ensure it's on top of other elements */
+    z-index: 1000;
+    /* Ensure it's on top of other elements */
 }
 
 #customContextMenu ul {
@@ -115,22 +127,26 @@ ul {
     padding: 0 10px 0 10px;
     cursor: pointer;
 }
+
 /* Invert the colors on hover to create a solid selection block */
 #customContextMenu li:hover {
     background-color: var(--background);
     color: var(--foreground);
 }
+
 #customContextMenu div {
     margin-top: 4px;
     font-size: 1.6rem;
     display: flex;
     align-items: center;
 }
+
 #customContextMenu div .shift-key-character {
     margin-top: 0px;
     font-size: 2.4rem;
     height: 0;
 }
+
 #customContextMenu div svg {
     height: 1.6rem;
 }
@@ -143,9 +159,10 @@ ul {
 }
 
 #figletContainer {
-    font-family: "Courier New", Courier, monospace !important;
-    font-size: 23.5px !important;
-    white-space: pre; /* Essential for preserving FIGlet spaces */
+    /*font-family: "Courier New", Courier, monospace !important;
+    font-size: 23.5px !important;*/
+    white-space: pre;
+    /* Essential for preserving FIGlet spaces */
     line-height: 1;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -155,13 +172,16 @@ ul {
     display: flex;
     flex-direction: row;
 }
+
 .second-section {
     display: flex;
     flex-direction: row;
 }
+
 #hero-picture {
     height: 24ch;
 }
+
 #crazy-picture {
     height: 32ch;
     width: 36ch;
@@ -170,26 +190,42 @@ ul {
 
 
 /* Hide the default OS cursor */
-html, body, a, li {
-    cursor: none !important; 
+html,
+body,
+a,
+li {
+    cursor: none !important;
 }
 
 #terminal-cursor {
-    position: fixed; /* Fixed to viewport */
+    position: fixed;
+    /* Fixed to viewport */
     top: 0;
     left: 0;
     background-color: var(--cursor-color);
-    pointer-events: none; /* CRITICAL: Allows clicks to pass through the cursor to links below */
-    z-index: 9999; /* Keeps it on top of everything */
-    
+    pointer-events: none;
+    /* CRITICAL: Allows clicks to pass through the cursor to links below */
+    z-index: 9999;
+    /* Keeps it on top of everything */
+
     /* Optional Retro Effect: Inverts the text color beneath the cursor block */
-    mix-blend-mode: difference; 
+    mix-blend-mode: difference;
 }
+
 /* The harsh on/off terminal blink */
 @keyframes terminal-blink {
-    0%, 49% { opacity: 1; }
-    50%, 100% { opacity: 0; }
+
+    0%,
+    49% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
 }
+
 /* We will add and remove this class using JavaScript */
 .cursor-blink {
     animation: terminal-blink 1s step-end infinite;

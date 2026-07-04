@@ -37,6 +37,57 @@ function enforceBaselineGrid() {
         }
     }
 
+
+    /*const leftoverPixels = window.innerWidth % cellW;
+    document.body.style.marginRight = `${leftoverPixels}px`;*/
+
+    // 1. Calculate how many pixels we have after reserving exactly 2ch (left + right)
+    const availableWidth = window.innerWidth - (cellW * 2);
+
+    // 2. Snap the body width to the nearest whole character column
+    const exactBodyWidth = Math.floor(availableWidth / cellW) * cellW;
+
+    // 3. Force the body to that exact width, and use auto-margins to center it
+    document.body.style.width = `${exactBodyWidth}px`;
+    document.body.style.marginLeft = 'auto';
+    document.body.style.marginRight = 'auto';
+
+
+
+    // D. NavBar Centering Magic
+    const navBar = document.getElementById('nav-bar');
+    if (navBar) {
+        // Force border-box so padding pushes inward, preserving the strict outer width
+        navBar.style.boxSizing = 'border-box';
+
+        // Lock the navbar to the exact same spatial grid as the body
+        navBar.style.width = `${exactBodyWidth}px`;
+        navBar.style.left = '0';
+        navBar.style.right = '0';
+        navBar.style.marginLeft = 'auto';
+        navBar.style.marginRight = 'auto';
+
+        navBar.style.justifyContent = 'flex-start'; // Disable native CSS centering
+        navBar.style.paddingLeft = '0px'; // Reset before measuring
+
+        // Measure the exact width of the links
+        let contentWidth = 0;
+        Array.from(navBar.children).forEach(child => {
+            contentWidth += child.getBoundingClientRect().width;
+        });
+
+        // Calculate dead space, divide by 2, and quantize to nearest cell block
+        const emptySpace = exactBodyWidth - contentWidth;
+        const padCells = Math.floor((emptySpace / 2) / cellW);
+
+        // Push it to the center using quantized blocks
+        if (padCells > 0) {
+            navBar.style.paddingLeft = `${padCells * cellW}px`;
+        }
+    }
+
+
+
     // C. Set standard offsets (Body Margin)
     const bodyStyle = window.getComputedStyle(document.body);
     offsetX = parseFloat(bodyStyle.marginLeft) || 0;
@@ -45,9 +96,6 @@ function enforceBaselineGrid() {
     // Apply the strict terminal block size
     cursor.style.width = `${cellW}px`;
     cursor.style.height = `${cellH}px`;
-
-    const leftoverPixels = window.innerWidth % cellW;
-    document.body.style.marginRight = `${leftoverPixels}px`;
 }
 
 
@@ -55,7 +103,7 @@ function enforceBaselineGrid() {
 if (figletContainer) {
     // This safely observes only text injection, preventing infinite loops
     const observer = new MutationObserver(enforceBaselineGrid);
-    observer.observe(figletContainer, { childList: true }); 
+    observer.observe(figletContainer, { childList: true });
 }
 
 let inactivityTimer;
@@ -63,10 +111,10 @@ let inactivityTimer;
 function resetBlinkTimer() {
     // 1. Immediately stop the blinking because the user is active
     cursor.classList.remove('cursor-blink');
-    
+
     // 2. Cancel the previous countdown clock
     clearTimeout(inactivityTimer);
-    
+
     // 3. Start a new 1-second (1000 millisecond) countdown
     inactivityTimer = setTimeout(() => {
         // If this timer finishes without being cancelled, start blinking
@@ -146,13 +194,13 @@ if (customContextMenuList) {
     customContextMenuList.addEventListener('mouseenter', () => {
         cursor.style.visibility = 'hidden';
     });
-    
+
     customContextMenuList.addEventListener('mouseleave', () => {
         // Bring it back when the mouse leaves the menu
-        cursor.style.visibility = 'visible'; 
-        
+        cursor.style.visibility = 'visible';
+
         // Optional: Instantly snap it to the new position so it doesn't 
         // look like it "jumped" from where it entered the menu
-        updateCursorPosition(); 
+        updateCursorPosition();
     });
 }

@@ -79,7 +79,7 @@ function toggleCursor() {
   setCookie("cursor", document.body.dataset.cursor, 30);
 }
 
-function getFittableCharacterCount(element) {
+/*function getFittableCharacterCount(element) {
   const padding = 26;
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -88,9 +88,37 @@ function getFittableCharacterCount(element) {
 
   const charWidth = context.measureText("X").width;
   return Math.round((window.innerWidth - padding) / charWidth);
+}*/
+function getFittableCharacterCount(element) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  // Match the font exactly
+  context.font = window.getComputedStyle(element).font;
+  const charWidth = context.measureText("X").width;
+
+  // 1. Get the parent container
+  const parent = element.parentElement;
+  const parentStyle = window.getComputedStyle(parent);
+  
+  // 2. clientWidth returns the inner width (excluding margins and scrollbars)
+  const parentInnerWidth = parent.clientWidth; 
+  
+  // 3. Subtract any internal padding the parent might have
+  const paddingLeft = parseFloat(parentStyle.paddingLeft) || 0;
+  const paddingRight = parseFloat(parentStyle.paddingRight) || 0;
+  
+  // 4. The absolute true space available for text
+  const availableWidth = parentInnerWidth - paddingLeft - paddingRight;
+
+  // Use Math.floor instead of Math.round to guarantee we never accidentally
+  // round up into an overflow state and trigger a line wrap.
+  return Math.floor(availableWidth / charWidth);
 }
 
-const titleTypes = {
+
+
+/*const titleTypes = {
   name: {
     content: "Abel George Antony",
     length: 18,
@@ -131,7 +159,82 @@ async function fetchTitle(titleTypeName = "name") {
   }
 
   figletContainer.textContent = await response.text();
+}*/
+/* ==========================================================================
+   FIGlet Title Logic (Exact Width Measurement & Centering)
+   ========================================================================== */
+
+const titleTypes = {
+  name: {
+    content: "Abel George Antony",
+    length: 18,
+    isLoaded: false,
+    cache: {}
+  },
+};
+
+// Measure the true width of the ASCII art (longest line)
+function getAsciiWidth(asciiStr) {
+    const lines = asciiStr.split('\n');
+    let max = 0;
+    for (const line of lines) {
+        if (line.length > max) max = line.length;
+    }
+    return max;
 }
+
+// Pre-load all tiny text files instantly in the background
+async function loadAllTitles(titleTypeName = "name") {
+    const titleInfo = titleTypes[titleTypeName];
+    if (titleInfo.isLoaded) return;
+
+    const fetchPromises = [];
+    for (let i = 1; i <= titleInfo.length; i++) {
+        fetchPromises.push(
+            fetch(siteAssetUrl(`/assets/figlet_titles/${titleTypeName}/${i}.txt`))
+            .then(res => res.ok ? res.text() : "")
+            .then(text => { titleInfo.cache[i] = text; })
+            .catch(() => { titleInfo.cache[i] = ""; })
+        );
+    }
+    
+    await Promise.all(fetchPromises);
+    titleInfo.isLoaded = true;
+}
+
+// Find the perfect fit and center it with exact space characters
+async function renderTitle(titleTypeName = "name") {
+    if (!figletContainer) return;
+
+    const titleInfo = titleTypes[titleTypeName];
+    if (!titleInfo.isLoaded) {
+        await loadAllTitles(titleTypeName);
+    }
+
+    const rawColumns = getFittableCharacterCount(figletContainer);
+
+    // Find the largest file that physically fits in the columns
+    let bestText = titleInfo.cache[1] || "";
+    for (let i = 1; i <= titleInfo.length; i++) {
+        const art = titleInfo.cache[i];
+        if (art && getAsciiWidth(art) <= rawColumns) {
+            bestText = art;
+        }
+    }
+
+    // Calculate dead space and pad left to center perfectly
+    const artWidth = getAsciiWidth(bestText);
+    const paddingLeft = Math.max(0, Math.floor((rawColumns - artWidth) / 2));
+    const spaces = " ".repeat(paddingLeft);
+    
+    const centeredArt = bestText.split('\n').map(line => spaces + line).join('\n');
+    
+    figletContainer.textContent = centeredArt;
+}
+
+
+
+
 
 function updateHorizontalSeperators() {
   const horizontalSeperators = document.querySelectorAll(".horizontal-seperator");
@@ -145,14 +248,16 @@ function updateHorizontalSeperators() {
 }
 
 window.addEventListener("resize", () => {
-  fetchTitle();
+  //fetchTitle();
+  renderTitle();
   updateHorizontalSeperators();
   enforceBaselineGrid();
   quantizeImages();
 });
 
 window.addEventListener("load", () => {
-  fetchTitle();
+  //fetchTitle();
+  renderTitle();
   updateHorizontalSeperators();
   enforceBaselineGrid();
   quantizeImages();
