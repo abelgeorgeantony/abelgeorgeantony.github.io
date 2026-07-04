@@ -2,13 +2,15 @@
 permalink: /404
 layout: base
 ---
+<script>
+  if ((window.location.pathname !== "/404") && (window.location.pathname !== "/404/")) {
+    console.log(window.location.pathname);
+    window.location.href = "/404";
+  }
 
+</script>
 
-<main>
-  <h1>404</h1>
+<p>Resource not found :(</p>
+<p>The requested resource could not be found.</p>
 
-  <p><strong>Resource not found :(</strong></p>
-  <p>The requested resource could not be found.</p>
-
-  <p>Go to <a href="/">root</a></p>
-</main>
+<p>Go to <a href="/">root</a></p>
