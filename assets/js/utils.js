@@ -121,6 +121,7 @@ function applyResponsiveLayout() {
 Breakpoints.on('mobile', 'enter', () => {
     currentBreakpoint = 'mobile';
     applyResponsiveLayout();
+    //document.getElementById("terminal-cursor").style.display = "none";
 });
 
 Breakpoints.on('desktop', 'enter', () => {
