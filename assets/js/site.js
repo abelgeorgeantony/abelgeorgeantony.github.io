@@ -175,21 +175,24 @@ const titleTypes = {
   name: {
     content: "Abel George Antony",
     length: 18,
-    urlpaths: ["/", ""],
     isLoaded: false,
     cache: {}
   },
   posts: {
     content: "Posts",
     length: 5,
-    urlpaths: ["/posts", "/posts/"],
     isLoaded: false,
     cache: {}
   },
   gallery: {
     content: "Gallery",
     length: 7,
-    urlpaths: ["/gallery", "/gallery/"],
+    isLoaded: false,
+    cache: {}
+  },
+  youtube: {
+    content: "Youtube",
+    length: 7,
     isLoaded: false,
     cache: {}
   }
@@ -225,15 +228,16 @@ async function loadAllTitles(titleTypeName = "name") {
 }
 
 // Find the perfect fit and center it with exact space characters
-async function renderTitle(urlPathname) {
-  if (!figletContainer) return;
+async function renderTitle(titleTypeNeeded = "name") {
+  if (!figletContainer) return;  
 
-  const titleTypeName = Object.keys(titleTypes).find(key =>
+  /*const titleTypeName = Object.keys(titleTypes).find(key =>
     titleTypes[key].urlpaths.includes(urlPathname)
-  ) || "name";
-  const titleInfo = titleTypes[titleTypeName];
+  ) || "name";*/
+  const titleInfo = titleTypes[titleTypeNeeded];
+  figletContainer.innerText = titleInfo.content;
   if (!titleInfo.isLoaded) {
-    await loadAllTitles(titleTypeName);
+    await loadAllTitles(titleTypeNeeded);
   }
 
   const rawColumns = getFittableCharacterCount(figletContainer);
@@ -274,7 +278,7 @@ function updateHorizontalSeperators() {
 
 window.addEventListener("resize", () => {
   //fetchTitle();
-  renderTitle(window.location.pathname);
+  renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
   quantizeImages();
@@ -282,7 +286,7 @@ window.addEventListener("resize", () => {
 
 window.addEventListener("load", () => {
   //fetchTitle();
-  renderTitle(window.location.pathname);
+  renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
   quantizeImages();

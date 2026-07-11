@@ -84,6 +84,16 @@
   {% endfor %}
   {% endif %}
 
+  <script type="application/json" id="page-data">
+    {
+    "figlet" : {{ page.figlet | jsonify }}
+    }
+  </script>
+  <script>
+    const pageData = JSON.parse(document.getElementById('page-data').textContent);
+    const figletTitleTypeNeeded = pageData.figlet;
+  </script>
+
 
   <div id="nav-bar">
     <a href="/">Home</a>
@@ -95,7 +105,7 @@
     <a href="/links/">Links</a>
   </div>
   <div id="figletContainer">
-    My name made into a title using figlet!
+    figlet title!
   </div>
   <main>
     {{ content }} <!-- Page content will be inserted here -->
