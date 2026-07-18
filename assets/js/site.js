@@ -322,13 +322,12 @@ window.addEventListener("load", () => {
   applyRetroDither("hero-picture");
   applyRetroDither("crazy-picture");
 
+  const btn = document.querySelector('#instantLoader button');
   if (getCookie("userAcceptedUnappealness") === "true") {
-    const btn = document.querySelector('#instantLoader button');
     // Start the animation and pass the closing function as a callback
     startGreenFireAnimation(btn, closeInstantLoader);
   }
   else {
-    const btn = document.querySelector('#instantLoader button');
     btn.classList.remove("hidden");
   }
   instantLoader.children[0].classList.add("hidden");

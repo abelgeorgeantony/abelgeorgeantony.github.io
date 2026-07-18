@@ -17,10 +17,6 @@
     color: var(--background);
 }
 
-.hidden {
-    display: none !important;
-}
-
 .no-select {
     /* Safari */
     -webkit-user-select: none;
