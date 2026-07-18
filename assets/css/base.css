@@ -190,10 +190,7 @@ ul {
 
 
 /* Hide the default OS cursor */
-html,
-body,
-a,
-li {
+.hide-cursor{
     cursor: none !important;
 }
 

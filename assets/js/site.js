@@ -56,29 +56,47 @@ document.addEventListener("contextmenu", (event) => {
 });
 
 function toggleTheme() {
-  if (document.body.dataset.theme === "dark") {
-    document.body.dataset.theme = "light";
+  if (document.documentElement.dataset.theme === "dark") {
+    document.documentElement.dataset.theme = "light";
     toggleThemeButton.innerText = "Dark Mode";
   } else {
-    document.body.dataset.theme = "dark";
+    document.documentElement.dataset.theme = "dark";
     toggleThemeButton.innerText = "Light Mode";
   }
 
-  setCookie("theme", document.body.dataset.theme, 30);
+  setCookie("theme", document.documentElement.dataset.theme, 30);
 }
 
 function toggleCursor() {
-  if (document.body.dataset.cursor === "custom") {
-    document.body.dataset.cursor = "default";
+  const elements = document.querySelectorAll("html, body, a, ul, ol, li");
+  if (document.documentElement.dataset.cursor === "custom") {
+    elements.forEach((element) => {
+      element.classList.remove("hide-cursor");
+    });
+    document.getElementById("terminal-cursor").classList.add("hidden");
+    document.documentElement.dataset.cursor = "default";
     toggleCursorButton.innerText = "Custom Cursor";
   } else {
-    document.body.dataset.cursor = "custom";
+    elements.forEach((element) => {
+      element.classList.add("hide-cursor");
+    });
+    document.getElementById("terminal-cursor").classList.remove("hidden");
+    document.documentElement.dataset.cursor = "custom";
     toggleCursorButton.innerText = "Default Cursor";
   }
 
-  setCookie("cursor", document.body.dataset.cursor, 30);
+  setCookie("cursor", document.documentElement.dataset.cursor, 30);
 }
 
+
+function userAcceptedUnappealness() {
+  setCookie("userAcceptedUnappealness", "true", 30);
+
+  // Find the button to use as the starting coordinate for the fire
+  const btn = document.querySelector('#instantLoader button');
+  // Start the animation and pass the closing function as a callback
+  startGreenFireAnimation(btn, closeInstantLoader);
+}
 /*function getFittableCharacterCount(element) {
   const padding = 26;
   const canvas = document.createElement("canvas");
@@ -229,7 +247,7 @@ async function loadAllTitles(titleTypeName = "name") {
 
 // Find the perfect fit and center it with exact space characters
 async function renderTitle(titleTypeNeeded = "name") {
-  if (!figletContainer) return;  
+  if (!figletContainer) return;
 
   /*const titleTypeName = Object.keys(titleTypes).find(key =>
     titleTypes[key].urlpaths.includes(urlPathname)
@@ -277,7 +295,6 @@ function updateHorizontalSeperators() {
 }
 
 window.addEventListener("resize", () => {
-  //fetchTitle();
   renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
@@ -285,7 +302,19 @@ window.addEventListener("resize", () => {
 });
 
 window.addEventListener("load", () => {
-  //fetchTitle();
+  if (getCookie("theme") === "dark") {
+    document.documentElement.dataset.theme = "dark";
+    toggleThemeButton.innerText = "Light Mode";
+  }
+  if (getCookie("cursor") === "default") {
+    document.documentElement.dataset.cursor = "custom";
+    toggleCursor();
+  }
+  else {
+    document.documentElement.dataset.cursor = "default";
+    toggleCursor();
+  }
+
   renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
@@ -293,23 +322,16 @@ window.addEventListener("load", () => {
   applyRetroDither("hero-picture");
   applyRetroDither("crazy-picture");
 
-  if (getCookie("theme") === "dark") {
-    document.body.dataset.theme = "dark";
-    toggleThemeButton.innerText = "Light Mode";
+  if (getCookie("userAcceptedUnappealness") === "true") {
+    const btn = document.querySelector('#instantLoader button');
+    // Start the animation and pass the closing function as a callback
+    startGreenFireAnimation(btn, closeInstantLoader);
   }
-
-  if (getCookie("cursor") === "default") {
-    document.body.dataset.cursor = "default";
-    toggleCursorButton.innerText = "Custom Cursor";
+  else {
+    const btn = document.querySelector('#instantLoader button');
+    btn.classList.remove("hidden");
   }
-
-  if (instantLoader) {
-    instantLoader.classList.add("loader-hidden");
-
-    setTimeout(() => {
-      instantLoader.remove();
-    }, 400);
-  }
+  instantLoader.children[0].classList.add("hidden");
 });
 
 function applyRetroDither(imgid) {
@@ -364,4 +386,148 @@ function applyRetroDither(imgid) {
   } else {
     img.addEventListener("load", processDither);
   }
+}
+
+
+
+function startGreenFireAnimation(triggerElement, onComplete) {
+  if (!instantLoader) return onComplete();
+
+  // 1. Create and overlay the canvas on the loader
+  const canvas = document.createElement("canvas");
+  canvas.style.position = "absolute";
+  canvas.style.top = "0";
+  canvas.style.left = "0";
+  canvas.style.width = "100%";
+  canvas.style.height = "100%";
+  canvas.style.zIndex = "999999";
+  canvas.style.pointerEvents = "none";
+  instantLoader.appendChild(canvas);
+  instantLoader.style.cursor = "none !important";
+
+  const ctx = canvas.getContext("2d");
+  const rect = instantLoader.getBoundingClientRect();
+  canvas.width = rect.width;
+  canvas.height = rect.height;
+
+  // 2. Setup the Cellular Automata Grid
+  const cellSize = 14; // Matches the character block width from your responsive logic
+  const cols = Math.ceil(canvas.width / cellSize);
+  const rows = Math.ceil(canvas.height / cellSize);
+
+  let grid = Array.from({ length: cols }, () => new Array(rows).fill(0));
+  let nextGrid = Array.from({ length: cols }, () => new Array(rows).fill(0));
+
+  /*// 3. Ignite at the button's location (or screen center as fallback)
+  let startX = Math.floor(cols / 2);
+  let startY = Math.floor(rows / 2);
+
+  if (triggerElement) {
+    const btnRect = triggerElement.getBoundingClientRect();
+    startX = Math.floor((btnRect.left + btnRect.width / 2) / cellSize);
+    startY = Math.floor((btnRect.top + btnRect.height / 2) / cellSize);
+  }
+
+  // Bound checks
+  startX = Math.max(0, Math.min(cols - 1, startX));
+  startY = Math.max(0, Math.min(rows - 1, startY));
+
+  // Set initial "burning" cell
+  grid[startX][startY] = 1;
+  ctx.fillStyle = "#66ff66";
+  ctx.fillRect(startX * cellSize, startY * cellSize, cellSize, cellSize);
+  */
+
+
+  // 3. Ignite at the button's location OR all four corners
+  ctx.fillStyle = getCssVariable("--background");
+
+  if (!triggerElement.classList.contains("hidden")) {
+    // If the button exists, start from its center coordinates
+    const btnRect = triggerElement.getBoundingClientRect();
+    let startX = Math.floor((btnRect.left + btnRect.width / 2) / cellSize);
+    let startY = Math.floor((btnRect.top + btnRect.height / 2) / cellSize);
+
+    // Bound checks
+    startX = Math.max(0, Math.min(cols - 1, startX));
+    startY = Math.max(0, Math.min(rows - 1, startY));
+
+    grid[startX][startY] = 1;
+    ctx.fillRect(startX * cellSize, startY * cellSize, cellSize, cellSize);
+  } else {
+    // If no button is passed, ignite the four corners
+    const corners = [
+      { x: 0, y: 0 },                                // Top-Left
+      { x: cols - 1, y: 0 },                         // Top-Right
+      { x: 0, y: rows - 1 },                         // Bottom-Left
+      { x: cols - 1, y: rows - 1 }                   // Bottom-Right
+    ];
+
+    for (let i = 0; i < corners.length; i++) {
+      let cx = corners[i].x;
+      let cy = corners[i].y;
+      grid[cx][cy] = 1;
+      ctx.fillRect(cx * cellSize, cy * cellSize, cellSize, cellSize);
+    }
+  }
+
+  let isAnimating = true;
+
+  // 4. Spread loop algorithm
+  function update() {
+    let changed = false;
+    let emptyCount = 0;
+
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        nextGrid[x][y] = grid[x][y]; // Inherit previous state
+
+        if (grid[x][y] === 0) {
+          emptyCount++;
+
+          // Check orthogonal neighbors
+          let neighbors = 0;
+          if (x > 0 && grid[x - 1][y] === 1) neighbors++;
+          if (x < cols - 1 && grid[x + 1][y] === 1) neighbors++;
+          if (y > 0 && grid[x][y - 1] === 1) neighbors++;
+          if (y < rows - 1 && grid[x][y + 1] === 1) neighbors++;
+
+          // 65% chance to spread if a neighbor is burning
+          if (neighbors > 0 && Math.random() < 0.65) {
+            nextGrid[x][y] = 1;
+            changed = true;
+            emptyCount--;
+
+            // Draw newly converted cell
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+          }
+        }
+      }
+    }
+
+    // Fast O(1) buffer swap
+    let temp = grid;
+    grid = nextGrid;
+    nextGrid = temp;
+
+    // 5. Completion Logic
+    if (emptyCount === 0 || !changed) {
+      if (emptyCount > 0) {
+        // Failsafe: if the random spread stalls out, instantly fill the remaining gaps
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      isAnimating = false;
+
+      // Pause briefly for impact, then fire your existing close function
+      setTimeout(() => {
+        onComplete();
+      }, 200);
+    }
+
+    if (isAnimating) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
 }

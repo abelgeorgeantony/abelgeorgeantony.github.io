@@ -36,6 +36,11 @@ function getCookie(name) {
 }
 
 
+function getCssVariable(variableName, element = document.documentElement) {
+  return getComputedStyle(element).getPropertyValue(variableName).trim();
+}
+
+
 function openCustomContextMenu() {
     customContextMenu.classList.remove("hidden");
     document.body.classList.add("no-scroll");
@@ -43,6 +48,16 @@ function openCustomContextMenu() {
 function closeCustomContextMenu() {
     customContextMenu.classList.add("hidden");
     document.body.classList.remove("no-scroll");
+}
+
+function closeInstantLoader() {
+    if (instantLoader) {
+      instantLoader.classList.add("loader-hidden");
+
+      setTimeout(() => {
+        instantLoader.remove();
+      }, 400);
+    }
 }
 
 

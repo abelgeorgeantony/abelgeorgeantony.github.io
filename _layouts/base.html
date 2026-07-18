@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html data-theme="light" data-cursor="custom">
 
 <head>
   <meta charset="utf-8">
@@ -16,7 +16,8 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #66ff66;
+      background-color: white;
+      color: black;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -24,6 +25,7 @@
       transition: opacity 0.4s ease;
       font-size: larger;
       font-family: FixedSys;
+      cursor: auto;
     }
 
     #instantLoader h1 {
@@ -31,6 +33,31 @@
       white-space: nowrap;
       /* Keeps the content on a single line */
       margin: 0 auto;
+    }
+
+    #instantLoader h4 {
+      margin: 10px;
+    }
+    #instantLoader div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #instantLoader button {
+      background-color: #66ff66;
+      cursor: pointer;
+      width: fit-content;
+      font-size: larger;
+      font-family: FixedSys;
+      border: solid 2px black;
+      border-radius: 5px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    #instantLoader button:hover {
+      /* x-offset, y-offset, blur, spread, color */
+      box-shadow: 0 0 0 3px black;
     }
 
     /* Utility class added by JS to hide the loader */
@@ -45,12 +72,16 @@
   {% seo title=false %}
 </head>
 
-<body data-theme="light" data-cursor="custom">
+<body>
   <div id="instantLoader" style="display: flex; flex-direction: column;">
     <h1>
       LOADING
     </h1>
-    <h6>BEST VIEWED IN DESKTOP</h6>
+    <h4>BEST VIEWED IN DESKTOP</h4>
+    <div>
+      <h4>The following UI/UX might be Unappealing to many people.</h4>
+      <button class="hidden" onclick="userAcceptedUnappealness()">I Understand!</button>
+    </div>
   </div>
   <style>
     @font-face {
