@@ -12,64 +12,6 @@
     .hidden {
       display: none !important;
     }
-
-    /* Base loader*/
-    #instantLoader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: white;
-      color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-      transition: opacity 0.4s ease;
-      font-size: larger;
-      font-family: FixedSys;
-      cursor: auto;
-    }
-
-    #instantLoader h1 {
-      overflow: hidden;
-      white-space: nowrap;
-      /* Keeps the content on a single line */
-      margin: 0 auto;
-    }
-
-    #instantLoader h4 {
-      margin: 10px;
-    }
-
-    #instantLoader div {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #instantLoader button {
-      background-color: #66ff66;
-      cursor: pointer;
-      width: fit-content;
-      font-size: larger;
-      font-family: FixedSys;
-      border: solid 2px black;
-      border-radius: 5px;
-      transition: box-shadow 0.2s ease;
-    }
-
-    #instantLoader button:hover {
-      /* x-offset, y-offset, blur, spread, color */
-      box-shadow: 0 0 0 3px black;
-    }
-
-    /* Utility class added by JS to hide the loader */
-    .loader-hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
   </style>
 
   <title>{{ page.title }}</title>
@@ -78,16 +20,9 @@
 </head>
 
 <body>
-  <div id="instantLoader" style="display: flex; flex-direction: column;">
-    <h1>
-      LOADING
-    </h1>
-    <h4>BEST VIEWED IN DESKTOP</h4>
-    <div>
-      <h4>The following UI/UX might be Unappealing to many people.</h4>
-      <button class="hidden" onclick="userAcceptedUnappealness()">I Understand!</button>
-    </div>
-  </div>
+
+  {% include loader.html %}
+  
   <style>
     @font-face {
       font-family: FixedSys;
@@ -125,25 +60,21 @@
     "figlet" : {{ page.figlet | jsonify }}
     }
   </script>
+
   <script>
     const pageData = JSON.parse(document.getElementById('page-data').textContent);
     const figletTitleTypeNeeded = pageData.figlet;
   </script>
 
 
-  {% include navbar.html %}
-  <div id="figletContainer">
-    figlet title!
-  </div>
+  {% include header.html %}
+  
   <main>
     {{ content }} <!-- Page content will be inserted here -->
   </main>
   <div class="horizontal-seperator" data-separatorsymbol="-"></div>
-  <footer>
-    <a href="mailto:social.abelgeorgeantony@gmail.com">social.abelgeorgeantony@gmail.com</a> | <a
-      href="https://www.instagram.com/abelgeorgeantony">instagram.com/abelgeorgeantony</a> | <a
-      href="https://github.com/abelgeorgeantony">github.com/abelgeorgeantony</a>
-  </footer>
+
+  {% include footer.html %}
 
   <div id="customContextMenu" class="hidden no-select">
     <ul>

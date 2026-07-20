@@ -42,12 +42,13 @@ build_subproject() {
 
   echo "=> Building ${sub_name} site..."
   rm -rf "$sub_source" "$sub_site"
-  mkdir -p "$sub_source/_layouts" "$sub_source/assets"
+  mkdir -p "$sub_source/_layouts" "$sub_source/assets" "$sub_source/_includes/"
 
   # Copy subrepo content, then overlay main theme assets
   copy_source "$sub_dir" "$sub_source"
   cp -R "$main_dir/_layouts/." "$sub_source/_layouts/"
   cp -R "$main_dir/assets/." "$sub_source/assets/"
+  cp -R "$main_dir/_includes/." "$sub_source/_includes/"
   
   # Re-apply the subrepo's specific assets if they exist (to override theme defaults)
   if [ -d "$sub_dir/assets" ]; then
