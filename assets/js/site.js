@@ -50,9 +50,25 @@ document.addEventListener("contextmenu", (event) => {
     return;
   }
 
-  customContextMenu.style.top = `${event.pageY}px`;
-  customContextMenu.style.left = `${event.pageX}px`;
+  // 1. Show the menu FIRST so the browser can calculate its dynamic dimensions
   openCustomContextMenu();
+  // 2. Grab the dynamic width and height (no hardcoded values)
+  const menuWidth = customContextMenu.offsetWidth;
+  const menuHeight = customContextMenu.offsetHeight;
+  // 3. Start with the cursor's viewport position
+  let posX = event.clientX;
+  let posY = event.clientY;
+  // 4. Adjust X if the menu bleeds off the right edge
+  if (posX + menuWidth > window.innerWidth) {
+    posX = window.innerWidth - menuWidth;
+  }
+  // 5. Adjust Y if the menu bleeds off the bottom edge
+  if (posY + menuHeight > window.innerHeight) {
+    posY = window.innerHeight - menuHeight;
+  };
+  // 6. Apply the final position, adding the current scroll offset back in
+  customContextMenu.style.left = `${posX + window.scrollX}px`;
+  customContextMenu.style.top = `${posY + window.scrollY}px`;
 });
 
 function toggleTheme() {
@@ -68,6 +84,10 @@ function toggleTheme() {
 }
 
 function toggleCursor() {
+  if(isTouchDevice()) {
+    document.documentElement.dataset.cursor = "custom";
+    toggleCursorButton.classList.add("hidden");
+  }
   const elements = document.querySelectorAll("html, body, a, ul, ol, li");
   if (document.documentElement.dataset.cursor === "custom") {
     elements.forEach((element) => {
@@ -226,6 +246,41 @@ function getAsciiWidth(asciiStr) {
   return max;
 }
 
+function calculateRequiredFontSize(element, targetAscii) {
+  // 1. Reset inline font-size to measure the natural CSS size
+  element.style.fontSize = "";
+
+  const style = window.getComputedStyle(element);
+  const defaultFontSize = parseFloat(style.fontSize);
+
+  // 2. Measure character width at default size
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  context.font = style.font;
+  const charWidth = context.measureText("X").width;
+
+  // 3. Calculate pixels needed for the art
+  const maxChars = getAsciiWidth(targetAscii);
+  const pixelsNeeded = maxChars * charWidth;
+
+  // 4. Calculate available space
+  const parent = element.parentElement;
+  const parentStyle = window.getComputedStyle(parent);
+  const availableWidth = parent.clientWidth -
+                         (parseFloat(parentStyle.paddingLeft) || 0) -
+                         (parseFloat(parentStyle.paddingRight) || 0);
+
+  // 5. Return the scaled size if it overflows, or the default if it fits
+  if (pixelsNeeded > availableWidth) {
+    const scaleFactor = availableWidth / pixelsNeeded;
+    return Math.floor(defaultFontSize * scaleFactor);
+  }
+  
+  return defaultFontSize; 
+}
+
+
+
 // Pre-load all tiny text files instantly in the background
 async function loadAllTitles(titleTypeName = "name") {
   const titleInfo = titleTypes[titleTypeName];
@@ -245,37 +300,49 @@ async function loadAllTitles(titleTypeName = "name") {
   titleInfo.isLoaded = true;
 }
 
-// Find the perfect fit and center it with exact space characters
+// Define your readability threshold
+const MIN_FONT_SIZE = 9;
 async function renderTitle(titleTypeNeeded = "name") {
   if (!figletContainer) return;
 
-  /*const titleTypeName = Object.keys(titleTypes).find(key =>
-    titleTypes[key].urlpaths.includes(urlPathname)
-  ) || "name";*/
   const titleInfo = titleTypes[titleTypeNeeded];
-  figletContainer.innerText = titleInfo.content;
+  figletContainer.innerText = titleInfo.content; 
+  
   if (!titleInfo.isLoaded) {
     await loadAllTitles(titleTypeNeeded);
   }
 
-  const rawColumns = getFittableCharacterCount(figletContainer);
-
-  // Find the largest file that physically fits in the columns
   let bestText = titleInfo.cache[1] || "";
-  for (let i = 1; i <= titleInfo.length; i++) {
+  let finalFontSize = "";
+
+  // 1. HYBRID CHECK: Loop from largest to smallest
+  for (let i = titleInfo.length; i >= 1; i--) {
     const art = titleInfo.cache[i];
-    if (art && getAsciiWidth(art) <= rawColumns) {
+    if (!art) continue;
+
+    const requiredSize = calculateRequiredFontSize(figletContainer, art);
+
+    // If the required size is readable, OR if it's our absolute smallest 
+    // option (i === 1), we accept it and stop searching.
+    if (requiredSize >= MIN_FONT_SIZE || i === 1) {
       bestText = art;
+      finalFontSize = `${requiredSize}px`;
+      break; 
     }
   }
 
-  // Calculate dead space and pad left to center perfectly
+  // 2. Apply the winning font size
+  figletContainer.style.fontSize = finalFontSize;
+
+  // 3. Calculate raw columns based on the applied font size
+  const rawColumns = getFittableCharacterCount(figletContainer);
+  
+  // 4. Pad and center perfectly
   const artWidth = getAsciiWidth(bestText);
   const paddingLeft = Math.max(0, Math.floor((rawColumns - artWidth) / 2));
   const spaces = " ".repeat(paddingLeft);
 
   const centeredArt = bestText.split('\n').map(line => spaces + line).join('\n');
-
   figletContainer.textContent = centeredArt;
 }
 
@@ -306,6 +373,7 @@ window.addEventListener("load", () => {
     document.documentElement.dataset.theme = "dark";
     toggleThemeButton.innerText = "Light Mode";
   }
+  
   if (getCookie("cursor") === "default") {
     document.documentElement.dataset.cursor = "custom";
     toggleCursor();

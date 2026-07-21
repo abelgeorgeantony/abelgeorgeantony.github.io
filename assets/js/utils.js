@@ -36,6 +36,29 @@ function getCookie(name) {
 }
 
 
+function isTouchDevice() {
+  // Precedence 1: Modern CSS Interaction Media Query  This is the most accurate indicator because it checks if the user's   *primary* current input mechanism is a coarse pointer (a finger).
+  if (typeof window.matchMedia === 'function' && window.matchMedia("(pointer: coarse)").matches) {
+    return true;
+  }
+  // Precedence 2: Modern Hardware Capability  If the browser doesn't support the media query, we check if the  hardware physically supports multiple touch points.
+  if ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) {
+    return true;
+  }
+  // Precedence 3: Legacy Event Fallback  A catch-all for older mobile browsers (like old versions of Safari/Chrome)  that don't support the navigator API but do register touch events.
+  if ('ontouchstart' in window) {
+    return true;
+  }
+  // Precedence 4: Vendor-Specific Legacy Fallback  Specifically for older versions of Internet Explorer / Edge.
+  if (navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 0) {
+    return true;
+  }
+
+  // If all checks fail, assume it is not a touch device.
+  return false;
+}
+
+
 function getCssVariable(variableName, element = document.documentElement) {
   return getComputedStyle(element).getPropertyValue(variableName).trim();
 }

@@ -57,15 +57,15 @@ function enforceBaselineGrid() {
     // D. NavBar Centering Magic
     const navBar = document.getElementById('nav-bar');
     if (navBar) {
-        // Force border-box so padding pushes inward, preserving the strict outer width
+        // Force border-box so padding pushes inward
         navBar.style.boxSizing = 'border-box';
 
-        // Lock the navbar to the exact same spatial grid as the body
-        navBar.style.width = `${exactBodyWidth}px`;
+        // 1. Allow the navbar background to stretch edge-to-edge
+        navBar.style.width = '100%';
         navBar.style.left = '0';
         navBar.style.right = '0';
-        navBar.style.marginLeft = 'auto';
-        navBar.style.marginRight = 'auto';
+        navBar.style.marginLeft = '0';
+        navBar.style.marginRight = '0';
 
         navBar.style.justifyContent = 'flex-start'; // Disable native CSS centering
         navBar.style.paddingLeft = '0px'; // Reset before measuring
@@ -76,14 +76,16 @@ function enforceBaselineGrid() {
             contentWidth += child.getBoundingClientRect().width;
         });
 
-        // Calculate dead space, divide by 2, and quantize to nearest cell block
+        // 2. Calculate the quantized grid padding (same as your original logic)
         const emptySpace = exactBodyWidth - contentWidth;
         const padCells = Math.floor((emptySpace / 2) / cellW);
+        const quantizedPadding = padCells > 0 ? (padCells * cellW) : 0;
 
-        // Push it to the center using quantized blocks
-        if (padCells > 0) {
-            navBar.style.paddingLeft = `${padCells * cellW}px`;
-        }
+        // 3. Calculate the unquantized dead space outside the body
+        const bodyMarginLeft = (window.innerWidth - exactBodyWidth) / 2;
+
+        // 4. Combine them so the navbar content lines up perfectly with the body grid
+        navBar.style.paddingLeft = `${bodyMarginLeft + quantizedPadding}px`;
     }
 
 
