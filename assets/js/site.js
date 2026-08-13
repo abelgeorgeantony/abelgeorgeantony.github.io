@@ -301,7 +301,7 @@ async function loadAllTitles(titleTypeName = "name") {
 }
 
 // Define your readability threshold
-const MIN_FONT_SIZE = 9;
+const MIN_FONT_SIZE = 8;
 async function renderTitle(titleTypeNeeded = "name") {
   if (!figletContainer) return;
 
