@@ -36,19 +36,20 @@
     }
 
     #instantLoader button {
-        background-color: #66ff66;
+        background-color: var(--background);
+        color: var(--foreground);
         cursor: pointer;
         width: fit-content;
         font-size: larger;
         font-family: FixedSys;
-        border: solid 2px black;
+        border: solid 2px var(--foreground);
         border-radius: 5px;
         transition: box-shadow 0.2s ease;
     }
 
     #instantLoader button:hover {
         /* x-offset, y-offset, blur, spread, color */
-        box-shadow: 0 0 0 3px black;
+        box-shadow: 0 0 0 3px var(--foreground);
     }
 
     /* Utility class added by JS to hide the loader */
@@ -65,6 +66,7 @@
     <h4>BEST VIEWED IN DESKTOP</h4>
     <div>
         <h4>The following UI/UX might be Unappealing to many people.</h4>
-        <button class="hidden" onclick="userAcceptedUnappealness()">I Understand!</button>
+        <h4 id="flashWarning" class="hidden">FLASH WARNING: THE COLORS MAY BLIND YOU!<br><button onclick="toggleTheme()">switch</button> TO DARK MODE FOR EASE ON THE EYES!</h4>
+        <button class="hidden" id="userAcceptanceBtn" onclick="userAcceptedUnappealness()">I Understand!</button>
     </div>
 </div>

@@ -71,20 +71,23 @@ document.addEventListener("contextmenu", (event) => {
   customContextMenu.style.top = `${posY + window.scrollY}px`;
 });
 
+
 function toggleTheme() {
   if (document.documentElement.dataset.theme === "dark") {
     document.documentElement.dataset.theme = "light";
     toggleThemeButton.innerText = "Dark Mode";
+    applyRetroDitherToAll(false);
   } else {
     document.documentElement.dataset.theme = "dark";
     toggleThemeButton.innerText = "Light Mode";
+    applyRetroDitherToAll(true);
   }
 
   setCookie("theme", document.documentElement.dataset.theme, 30);
 }
 
 function toggleCursor() {
-  if(isTouchDevice()) {
+  if (isTouchDevice()) {
     document.documentElement.dataset.cursor = "custom";
     toggleCursorButton.classList.add("hidden");
   }
@@ -113,7 +116,7 @@ function userAcceptedUnappealness() {
   setCookie("userAcceptedUnappealness", "true", 30);
 
   // Find the button to use as the starting coordinate for the fire
-  const btn = document.querySelector('#instantLoader button');
+  const btn = document.getElementById("userAcceptanceBtn");
   // Start the animation and pass the closing function as a callback
   startGreenFireAnimation(btn, closeInstantLoader);
 }
@@ -267,16 +270,16 @@ function calculateRequiredFontSize(element, targetAscii) {
   const parent = element.parentElement;
   const parentStyle = window.getComputedStyle(parent);
   const availableWidth = parent.clientWidth -
-                         (parseFloat(parentStyle.paddingLeft) || 0) -
-                         (parseFloat(parentStyle.paddingRight) || 0);
+    (parseFloat(parentStyle.paddingLeft) || 0) -
+    (parseFloat(parentStyle.paddingRight) || 0);
 
   // 5. Return the scaled size if it overflows, or the default if it fits
   if (pixelsNeeded > availableWidth) {
     const scaleFactor = availableWidth / pixelsNeeded;
     return Math.floor(defaultFontSize * scaleFactor);
   }
-  
-  return defaultFontSize; 
+
+  return defaultFontSize;
 }
 
 
@@ -304,10 +307,14 @@ async function loadAllTitles(titleTypeName = "name") {
 const MIN_FONT_SIZE = 8;
 async function renderTitle(titleTypeNeeded = "name") {
   if (!figletContainer) return;
+  if (titleTypeNeeded === "NONE") {
+    figletContainer.classList.add("hidden");
+    return;
+  }
 
   const titleInfo = titleTypes[titleTypeNeeded];
-  figletContainer.innerText = titleInfo.content; 
-  
+  figletContainer.innerText = titleInfo.content;
+
   if (!titleInfo.isLoaded) {
     await loadAllTitles(titleTypeNeeded);
   }
@@ -327,7 +334,7 @@ async function renderTitle(titleTypeNeeded = "name") {
     if (requiredSize >= MIN_FONT_SIZE || i === 1) {
       bestText = art;
       finalFontSize = `${requiredSize}px`;
-      break; 
+      break;
     }
   }
 
@@ -336,7 +343,7 @@ async function renderTitle(titleTypeNeeded = "name") {
 
   // 3. Calculate raw columns based on the applied font size
   const rawColumns = getFittableCharacterCount(figletContainer);
-  
+
   // 4. Pad and center perfectly
   const artWidth = getAsciiWidth(bestText);
   const paddingLeft = Math.max(0, Math.floor((rawColumns - artWidth) / 2));
@@ -369,11 +376,21 @@ window.addEventListener("resize", () => {
 });
 
 window.addEventListener("load", () => {
+  renderTitle(figletTitleTypeNeeded);
+  updateHorizontalSeperators();
+  enforceBaselineGrid();
+  quantizeImages();
+  imgsNeedingDither.push("hero-picture");
+  imgsNeedingDither.push("crazy-picture");
   if (getCookie("theme") === "dark") {
     document.documentElement.dataset.theme = "dark";
     toggleThemeButton.innerText = "Light Mode";
+    applyRetroDitherToAll(true);
   }
-  
+  else {
+    applyRetroDitherToAll(false);
+  }
+
   if (getCookie("cursor") === "default") {
     document.documentElement.dataset.cursor = "custom";
     toggleCursor();
@@ -383,75 +400,122 @@ window.addEventListener("load", () => {
     toggleCursor();
   }
 
-  renderTitle(figletTitleTypeNeeded);
-  updateHorizontalSeperators();
-  enforceBaselineGrid();
-  quantizeImages();
-  applyRetroDither("hero-picture");
-  applyRetroDither("crazy-picture");
-
-  const btn = document.querySelector('#instantLoader button');
+  const btn = document.getElementById("userAcceptanceBtn");
   if (getCookie("userAcceptedUnappealness") === "true") {
     // Start the animation and pass the closing function as a callback
     startGreenFireAnimation(btn, closeInstantLoader);
+
   }
   else {
+    document.getElementById("flashWarning").classList.remove("hidden");
     btn.classList.remove("hidden");
   }
+
   instantLoader.children[0].classList.add("hidden");
 });
 
-function applyRetroDither(imgid) {
+
+
+const imgsNeedingDither = [];
+function applyRetroDitherToAll(darkdither = false) {
+  for (const imgId of imgsNeedingDither) {
+    applyRetroDither(imgId, darkdither);
+  }
+}
+
+function applyRetroDither(imgid, darkdither = false) {
   const img = document.getElementById(imgid);
 
   if (!img) {
     return;
   }
 
-  function processDither() {
-    if (typeof bayerDither !== "function" || img.dataset.processed) {
+  function processDither(dd = false) {
+    if (typeof bayerDither !== "function") {
       return;
     }
 
-    img.dataset.processed = "true";
-    img.dataset.originalSrc = img.src;
+    // 1. ONE-TIME INITIALIZATION
+    // Save the original source and add the click listener ONLY the very first time this runs.
+    if (!img.dataset.ditherInitialized) {
+      img.dataset.originalSrc = img.src;
+      img.dataset.ditherInitialized = "true";
+      img.dataset.isDithered = "true";
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = img.naturalWidth;
-    canvas.height = img.naturalHeight;
-    ctx.drawImage(img, 0, 0);
-
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const retroPalette = [
-      [102, 255, 102],
-      [40, 40, 40],
-    ];
-
-    bayerDither(ctx, imageData, retroPalette, 1);
-
-    img.dataset.ditheredSrc = canvas.toDataURL();
-    img.src = img.dataset.ditheredSrc;
-    img.dataset.isDithered = "true";
-
-    if (!img.classList.contains("web-badge")) {
-      img.addEventListener("click", () => {
-        if (img.dataset.isDithered === "true") {
-          img.src = img.dataset.originalSrc;
-          img.dataset.isDithered = "false";
-        } else {
-          img.src = img.dataset.ditheredSrc;
-          img.dataset.isDithered = "true";
-        }
-      });
+      // Setup the click-to-reveal original image logic
+      if (!img.classList.contains("web-badge")) {
+        img.addEventListener("click", () => {
+          if (img.dataset.isDithered === "true") {
+            // Show original
+            img.src = img.dataset.originalSrc;
+            img.dataset.isDithered = "false";
+          } else {
+            // Restore dithered version based on the CURRENT theme
+            const currentThemeIsDark = document.documentElement.dataset.theme === "dark";
+            img.src = currentThemeIsDark ? img.dataset.darkDitherSrc : img.dataset.lightDitherSrc;
+            img.dataset.isDithered = "true";
+          }
+        });
+      }
     }
+
+    // 2. CHECK CACHE
+    // Determine which dataset key we are looking for based on the requested theme
+    const targetSrcKey = dd ? "darkDitherSrc" : "lightDitherSrc";
+
+    // If we already generated this specific theme's dither, just apply it and stop.
+    if (img.dataset[targetSrcKey]) {
+      // Only change the visible src if the user hasn't manually clicked to show the original
+      if (img.dataset.isDithered === "true") {
+        img.src = img.dataset[targetSrcKey];
+      }
+      return;
+    }
+
+    // 3. GENERATE DITHER (Runs once per theme, per image)
+    // We MUST draw from the original image pixels, not the currently displayed (potentially already dithered) ones.
+    const tempImg = new Image();
+    tempImg.crossOrigin = "Anonymous";
+    
+    tempImg.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = tempImg.naturalWidth;
+      canvas.height = tempImg.naturalHeight;
+      ctx.drawImage(tempImg, 0, 0);
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const retroPalette = [
+        [102, 255, 102],
+        [40, 40, 40],
+      ];
+
+      // Assuming your bayerDither function accepts the 5th parameter as Gamma
+      if (dd) {
+        bayerDither(ctx, imageData, retroPalette, 1, 2.5); 
+      } else {
+        bayerDither(ctx, imageData, retroPalette, 1, 1);
+      }
+
+      // Save the generated data URL to the cache
+      img.dataset[targetSrcKey] = canvas.toDataURL();
+
+      // Apply the newly generated image (only if the user isn't currently viewing the original via click)
+      if (img.dataset.isDithered === "true") {
+        img.src = img.dataset[targetSrcKey];
+      }
+    };
+
+    // Trigger the load
+    tempImg.src = img.dataset.originalSrc;
   }
 
+  // Run immediately if loaded, otherwise wait for load (using {once: true} to prevent memory leaks)
   if (img.complete) {
-    processDither();
+    processDither(darkdither);
   } else {
-    img.addEventListener("load", processDither);
+    img.addEventListener("load", () => { processDither(darkdither); }, { once: true });
   }
 }
 
@@ -514,6 +578,7 @@ function startGreenFireAnimation(triggerElement, onComplete) {
     const btnRect = triggerElement.getBoundingClientRect();
     let startX = Math.floor((btnRect.left + btnRect.width / 2) / cellSize);
     let startY = Math.floor((btnRect.top + btnRect.height / 2) / cellSize);
+    console.log(startX, startY)
 
     // Bound checks
     startX = Math.max(0, Math.min(cols - 1, startX));
