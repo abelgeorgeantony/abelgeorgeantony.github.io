@@ -1,7 +1,52 @@
 <div class="horizontal-seperator" data-separatorsymbol="-"></div>
 
 <footer>
-    <a href="mailto:social.abelgeorgeantony@gmail.com">social.abelgeorgeantony@gmail.com</a> | <a
-        href="https://www.instagram.com/abelgeorgeantony">instagram.com/abelgeorgeantony</a> | <a
-        href="https://github.com/abelgeorgeantony">github.com/abelgeorgeantony</a>
+    <div>
+        Looking for <a href="{{ site.hostname }}/wedger">Wedger</a> or <a href="https://github.com/abelgeorgeantony?tab=repositories">Some other project of mine</a> ?
+    </div>
+    <div id="fortune-output">Loading fortune...</div>
 </footer>
+<script>
+    // Configure the Emscripten Module object to locate your .wasm binary
+    var Module = {
+        locateFile: function (path) {
+            // Point this to wherever you host your libminifortune.wasm file
+            return "/assets/js/fortunes/" + path;
+        },
+        onRuntimeInitialized: function () {
+            displayFortune();
+        }
+    };
+
+    function getFortune() {
+        if (typeof Module === "undefined" || !Module._minifortune) {
+            console.error("Minifortune module not loaded or ready.");
+            return null;
+        }
+        try {
+            // Call the exported C/Wasm function which returns a pointer to a string
+            const fortunePtr = Module._minifortune();
+
+            // Convert the C pointer to a JavaScript string
+            const fortuneString = UTF8ToString(fortunePtr);
+
+            // Free the allocated memory in the Wasm heap
+            Module._free(fortunePtr);
+
+            return fortuneString;
+        } catch (e) {
+            console.error("Error getting fortune:", e);
+            return null;
+        }
+    }
+
+    function displayFortune() {
+        const fortune = getFortune();
+        const outputElement = document.getElementById("fortune-output");
+        if (fortune && outputElement) {
+            outputElement.innerText = fortune; // Displays pure text without cowsay
+        }
+    }
+</script>
+<!-- Load the Emscripten glue script -->
+<script src="/assets/js/fortunes/libminifortune.js" async></script>

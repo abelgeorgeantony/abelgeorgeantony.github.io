@@ -47,6 +47,15 @@ body {
     overflow-wrap: break-word;
 }
 
+footer {
+    display: flex;
+    flex-direction: column;
+}
+#fortune-output {
+    width: fit-content;
+    align-self: center;
+}
+
 p,
 div {
     margin: 0;

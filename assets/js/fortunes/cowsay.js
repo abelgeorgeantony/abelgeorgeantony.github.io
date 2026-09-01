@@ -1,0 +1,164 @@
+function cowsay(text) {
+  // A simplified string-width function for ASCII characters
+  const stringWidth = (str) => {
+    return str.length;
+  };
+
+  // Functions to create the speech balloon
+  const top = (length) => {
+    return new Array(length + 3).join("_");
+  };
+
+  const bottom = (length) => {
+    return new Array(length + 3).join("‾");
+  };
+
+  const pad = (text, length) => {
+    return text + new Array(length - stringWidth(text) + 1).join(" ");
+  };
+
+  const split = (text, wrap) => {
+    text = text
+      .replace(/\r\n?|[\n\u2028\u2029]/g, "\n")
+      .replace(/^\uFEFF/, "")
+      .replace(/\t/g, "        ");
+
+    const lines = [];
+    if (!wrap) {
+      return text.split("\n");
+    }
+
+    const textLines = text.split("\n");
+
+    for (const textLine of textLines) {
+      let currentLine = "";
+      const words = textLine.split(" ");
+
+      for (const word of words) {
+        // If a single word is longer than the wrap limit, break it
+        if (word.length > wrap) {
+          if (currentLine) lines.push(currentLine);
+          lines.push(word);
+          currentLine = "";
+          continue;
+        }
+
+        if (currentLine.length + word.length + (currentLine ? 1 : 0) <= wrap) {
+          currentLine += (currentLine ? " " : "") + word;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      if (currentLine) {
+        lines.push(currentLine);
+      }
+    }
+
+    return lines;
+  };
+
+  const max = (lines) => {
+    let max = 0;
+    for (let i = 0, len = lines.length; i < len; i += 1) {
+      if (stringWidth(lines[i]) > max) {
+        max = stringWidth(lines[i]);
+      }
+    }
+    return max;
+  };
+
+  const format = (text, wrap, delimiters) => {
+    const lines = split(text, wrap);
+    const maxLength = max(lines);
+    let balloon;
+    if (lines.length === 1) {
+      balloon = [
+        " " + top(maxLength),
+        delimiters.only[0] + " " + lines[0] + " " + delimiters.only[1],
+        " " + bottom(maxLength),
+      ];
+    } else {
+      balloon = [" " + top(maxLength)];
+      for (let i = 0, len = lines.length; i < len; i += 1) {
+        let delimiter;
+        if (i === 0) {
+          delimiter = delimiters.first;
+        } else if (i === len - 1) {
+          delimiter = delimiters.last;
+        } else {
+          delimiter = delimiters.middle;
+        }
+        balloon.push(
+          delimiter[0] + " " + pad(lines[i], maxLength) + " " + delimiter[1],
+        );
+      }
+      balloon.push(" " + bottom(maxLength));
+    }
+    return balloon.join("\n");
+  };
+
+  const sayBalloon = (text, wrap) => {
+    const delimiters = {
+      first: ["/", "\\"],
+      middle: ["|", "|"],
+      last: ["\\", "/"],
+      only: ["<", ">"],
+    };
+    return format(text, wrap, delimiters);
+  };
+
+  // Function to replace placeholders in the cow template
+  const escapeRe = (s) => {
+    if (s && s.replace) {
+      return s.replace(/\$/g, "$$$$");
+    }
+    return s;
+  };
+
+  const replacer = (cow, variables) => {
+    const eyes = escapeRe(variables.eyes);
+    const eyeL = eyes.charAt(0);
+    const eyeR = eyes.charAt(1);
+    const tongue = escapeRe(variables.tongue);
+
+    return cow
+      .replace(/\$thoughts/g, variables.thoughts)
+      .replace(/\$eyes/g, eyes)
+      .replace(/\$tongue/g, tongue)
+      .replace(/\$\{eyes\}/g, eyes)
+      .replace(/\$eye/, eyeL)
+      .replace(/\$eye/, eyeR)
+      .replace(/\$\{tongue\}/g, tongue);
+  };
+
+  // The default cow ASCII art.
+  const defaultCow = `
+        $thoughts   ^__^
+         $thoughts  ($eyes)\\_______
+            (__)\\       )\\/\\
+             $tongue ||----w |
+                ||     ||`;
+
+  // Default face options.
+  const face = {
+    eyes: "oo",
+    tongue: "  ",
+    thoughts: "\\",
+  };
+
+  // Generate the balloon and the cow
+  if (isSmallScreen()) {
+    const balloon = sayBalloon(text, 20);
+    const cow = replacer(defaultCow, face);
+
+    // Return the final raw string with standard spaces and newlines
+    return balloon + "\n" + cow;
+  } else {
+    const balloon = sayBalloon(text, 40);
+    const cow = replacer(defaultCow, face);
+
+    // Return the final raw string with standard spaces and newlines
+    return balloon + "\n" + cow;
+  }
+}

@@ -19,5 +19,5 @@ titlelen=${#title}
 mkdir -p $titletype
 
 for (( i=1; i<=$titlelen; i++ )); do
-    echo $title | fold -w $i | figlet -k -w 500 -f $font > "$titletype/$i.txt"
+    echo $title | fold -w $i | figlet -k -w 500 -f $font > "../assets/figlet_titles/$titletype/$i.txt"
 done

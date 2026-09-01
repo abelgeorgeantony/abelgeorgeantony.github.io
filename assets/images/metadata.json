@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-08-15T20:16:28+05:30",
+  "images": [{
+          "name": "attomshouse.jpg",
+          "path": "/gallery/assets/images/attomshouse.jpg"
+        },{
+          "name": "image01.jpeg",
+          "path": "/gallery/assets/images/image01.jpeg"
+        },{
+          "name": "image02.jpeg",
+          "path": "/gallery/assets/images/image02.jpeg"
+        },{
+          "name": "image03.jpeg",
+          "path": "/gallery/assets/images/image03.jpeg"
+        },{
+          "name": "image04.jpeg",
+          "path": "/gallery/assets/images/image04.jpeg"
+        },{
+          "name": "image05.jpg",
+          "path": "/gallery/assets/images/image05.jpg"
+        },{
+          "name": "image06.jpg",
+          "path": "/gallery/assets/images/image06.jpg"
+        },{
+          "name": "image07.jpeg",
+          "path": "/gallery/assets/images/image07.jpeg"
+        },{
+          "name": "image08.jpg",
+          "path": "/gallery/assets/images/image08.jpg"
+        },{
+          "name": "image09.jpg",
+          "path": "/gallery/assets/images/image09.jpg"
+        },{
+          "name": "image10.jpeg",
+          "path": "/gallery/assets/images/image10.jpeg"
+        },{
+          "name": "image11.jpeg",
+          "path": "/gallery/assets/images/image11.jpeg"
+        },{
+          "name": "image12.jpeg",
+          "path": "/gallery/assets/images/image12.jpeg"
+        },{
+          "name": "image13.jpeg",
+          "path": "/gallery/assets/images/image13.jpeg"
+        },{
+          "name": "image14.jpeg",
+          "path": "/gallery/assets/images/image14.jpeg"
+        },{
+          "name": "image15.jpeg",
+          "path": "/gallery/assets/images/image15.jpeg"
+        },{
+          "name": "image16.jpeg",
+          "path": "/gallery/assets/images/image16.jpeg"
+        },{
+          "name": "image17.jpeg",
+          "path": "/gallery/assets/images/image17.jpeg"
+        },{
+          "name": "image18.jpg",
+          "path": "/gallery/assets/images/image18.jpg"
+        },{
+          "name": "passportsizephoto.jpg",
+          "path": "/gallery/assets/images/passportsizephoto.jpg"
+        }]
+}

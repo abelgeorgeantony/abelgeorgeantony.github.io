@@ -3,7 +3,7 @@ set -euo pipefail
 
 # 1. Define all repository directories
 main_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-gallery_dir="${GALLERY_REPO:-$(cd "$main_dir/../gallery" && pwd)}"
+#gallery_dir="${GALLERY_REPO:-$(cd "$main_dir/../gallery" && pwd)}"
 posts_dir="${POSTS_REPO:-$(cd "$main_dir/../posts" && pwd)}"
 host="${HOST:-127.0.0.1}"
 port="${PORT:-4000}"
@@ -79,19 +79,22 @@ build_subproject() {
 }
 
 # 3. Build all subprojects upfront
-build_subproject "$gallery_dir" "gallery"
+#build_subproject "$gallery_dir" "gallery"
 build_subproject "$posts_dir" "posts"
 
 # 4. Watch subprojects in the background for changes
 if command -v inotifywait >/dev/null 2>&1; then
   echo "=> Starting background watcher for sub-repositories..."
   (
-    # Add posts_dir to the inotifywait monitor list
+    # Add posts_dir to the inotifywait monitor 
+    #while inotifywait -q -r -e modify,create,delete,move \
+    #  --exclude '(/\.git/|/_site/|/\.jekyll-cache/|/\.bundle/|/vendor/)' \
+    #  "$gallery_dir" "$posts_dir"; do
     while inotifywait -q -r -e modify,create,delete,move \
       --exclude '(/\.git/|/_site/|/\.jekyll-cache/|/\.bundle/|/vendor/)' \
-      "$gallery_dir" "$posts_dir"; do
+      "$posts_dir"; do
       
-      build_subproject "$gallery_dir" "gallery"
+      #build_subproject "$gallery_dir" "gallery"
       build_subproject "$posts_dir" "posts"
     done
   ) &
