@@ -355,18 +355,66 @@ async function renderTitle(titleTypeNeeded = "name") {
 
 
 
+function getSeparatorSymbolWidth(separator, symbol) {
+  const probe = document.createElement("span");
+  const styles = getComputedStyle(separator);
 
+  probe.textContent = symbol;
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.whiteSpace = "pre";
+  probe.style.font = styles.font;
+  probe.style.letterSpacing = styles.letterSpacing;
+  probe.style.fontVariantLigatures = styles.fontVariantLigatures;
+
+  document.body.appendChild(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+
+  return width;
+}
 
 function updateHorizontalSeperators() {
-  const horizontalSeperators = document.querySelectorAll(".horizontal-seperator");
+  document.querySelectorAll(".horizontal-seperator").forEach((separator) => {
+    const symbol = separator.dataset.separatorsymbol || "-";
+    const symbolWidth = getSeparatorSymbolWidth(separator, symbol);
 
-  horizontalSeperators.forEach((seperator) => {
-    const columns = getFittableCharacterCount(seperator);
-    const seperatorSymbol = seperator.dataset.separatorsymbol;
+    // Use the parent content width, rather than viewport width.
+    const availableWidth = separator.parentElement.getBoundingClientRect().width;
 
-    seperator.innerText = seperatorSymbol.repeat(columns);
+    const fullWidthCount = Math.floor(availableWidth / symbolWidth);
+    
+    let requestedCount;
+    if(separator.dataset.seperatorcountmodifier === "half") {
+      requestedCount = fullWidthCount/2;
+    }
+
+    const count = Number.isFinite(requestedCount) && requestedCount > 0
+      ? Math.min(Math.floor(requestedCount), fullWidthCount)
+      : fullWidthCount;
+
+    separator.textContent = symbol.repeat(count);
   });
 }
+
+/*function updateHorizontalSeperators() {
+  document.querySelectorAll(".horizontal-seperator").forEach((seperator) => {
+    const columns = getFittableCharacterCount(seperator);
+    const seperatorSymbol = seperator.dataset.separatorsymbol;
+    if (seperator.dataset.seperatorcountmodifier) {
+      console.log("hiiiiiiiiiiiiiiiiiiiii")
+      if (seperator.dataset.seperatorcountmodifier === "half") {
+        seperator.innerText = seperatorSymbol.repeat((columns) / 2);
+      }
+      else {
+        seperator.innerText = seperatorSymbol.repeat(columns);
+      }
+    }
+    else {
+      seperator.innerText = seperatorSymbol.repeat(columns);
+    }
+  });
+}*/
 
 window.addEventListener("resize", () => {
   renderTitle(figletTitleTypeNeeded);
@@ -476,7 +524,7 @@ function applyRetroDither(imgid, darkdither = false) {
     // We MUST draw from the original image pixels, not the currently displayed (potentially already dithered) ones.
     const tempImg = new Image();
     tempImg.crossOrigin = "Anonymous";
-    
+
     tempImg.onload = () => {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
@@ -493,7 +541,7 @@ function applyRetroDither(imgid, darkdither = false) {
 
       // Assuming your bayerDither function accepts the 5th parameter as Gamma
       if (dd) {
-        bayerDither(ctx, imageData, retroPalette, 1, 2.5); 
+        bayerDither(ctx, imageData, retroPalette, 1, 2.5);
       } else {
         bayerDither(ctx, imageData, retroPalette, 1, 1);
       }

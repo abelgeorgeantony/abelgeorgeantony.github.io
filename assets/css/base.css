@@ -74,8 +74,11 @@ ul {
 
 .horizontal-seperator {
     width: fit-content;
-    /*margin-left: auto;
-    margin-right: auto;*/
+    margin-left: auto;
+    margin-right: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    font-variant-ligatures: no-common-ligatures;
 }
 
 .mono-spaced-div {

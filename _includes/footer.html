@@ -1,10 +1,14 @@
 <div class="horizontal-seperator" data-separatorsymbol="-"></div>
 
 <footer>
-    <div>
+    <p>
         Looking for <a href="{{ site.hostname }}/wedger">Wedger</a> or <a href="https://github.com/abelgeorgeantony?tab=repositories">Some other project of mine</a> ?
-    </div>
+    </p>
+    <p>&nbsp;</p>
+    <p>Here is some fortune for you:</p>
     <div id="fortune-output">Loading fortune...</div>
+    <p>&nbsp;</p>
+    <div class="horizontal-seperator" data-separatorsymbol="-EOF-"></div>
 </footer>
 <script>
     // Configure the Emscripten Module object to locate your .wasm binary
@@ -45,6 +49,8 @@
         const outputElement = document.getElementById("fortune-output");
         if (fortune && outputElement) {
             outputElement.innerText = fortune; // Displays pure text without cowsay
+            outputElement.innerHTML = /*'<div class="horizontal-seperator" data-separatorsymbol="-" data-seperatorcountmodifier="half"></div>' + */fortune;
+            updateHorizontalSeperators();
         }
     }
 </script>
