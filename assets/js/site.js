@@ -420,14 +420,14 @@ window.addEventListener("resize", () => {
   renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
-  quantizeImages();
+  //quantizeImages();
 });
 
 window.addEventListener("load", () => {
   renderTitle(figletTitleTypeNeeded);
   updateHorizontalSeperators();
   enforceBaselineGrid();
-  quantizeImages();
+  //quantizeImages();
   imgsNeedingDither.push("hero-picture");
   imgsNeedingDither.push("crazy-picture");
   if (getCookie("theme") === "dark") {

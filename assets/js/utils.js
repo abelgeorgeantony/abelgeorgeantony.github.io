@@ -150,7 +150,7 @@ function applyResponsiveLayout() {
 
     // Re-trigger layout alignment functions
     setTimeout(() => {
-        if (typeof quantizeImages === 'function') quantizeImages();
+        //if (typeof quantizeImages === 'function') quantizeImages();
         if (typeof enforceBaselineGrid === 'function') enforceBaselineGrid();
         if (typeof updateHorizontalSeperators === 'function') updateHorizontalSeperators();
     }, 50);

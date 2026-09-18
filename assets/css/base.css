@@ -187,12 +187,15 @@ ul {
 }
 
 #hero-picture {
-    height: 24ch;
+    width: 21ch;
+    height: auto;
+    aspect-ratio: 3/4;
 }
 
 #crazy-picture {
-    height: 32ch;
-    width: 36ch;
+    width: 40ch;
+    height: auto;
+    aspect-ratio: 4/3;
     object-fit: cover;
 }
 
